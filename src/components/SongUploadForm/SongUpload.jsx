@@ -1,30 +1,42 @@
-// SongUploadForm.js - formularz przesyłania piosenki
+// SongUploadForm.js
 
 import React, { useState } from 'react';
+import styles from './SongUpload.module.css';
 
 const SongUploadForm = ({ onUploadComplete }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    setSelectedFile(file);
   };
 
-  const handleUpload = () => {
-    // Symulacja wysyłania pliku na serwer i odbierania odpowiedzi
-    // W rzeczywistym środowisku, to zadanie należy zrealizować na serwerze.
-    const mockResponse = {
-      genre: 'Rock', // Tu otrzymujesz rozpoznany gatunek
-      // Dodatkowe informacje z backendu
+  const uploadSong = () => {
+    if (!selectedFile) {
+      console.error('Nie wybrano pliku.');
+      return;
+    }
+
+    if (!selectedFile.name.toLowerCase().endsWith('.mp3')) {
+      console.error('Niewłaściwy format pliku. Proszę przesłać plik MP3.');
+      return;
+    }
+
+    const mockSongInfo = {
+      title: 'Przykładowa Piosenka',
+      artist: 'Przykładowy Artysta',
+      album: 'Przykładowy Album',
+      year: '2023',
+      genre: 'Pop',
     };
 
-    onUploadComplete(mockResponse);
+    onUploadComplete(mockSongInfo);
   };
 
   return (
-    <div>
-      <h2>Prześlij piosenkę</h2>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Prześlij</button>
+    <div className={styles.container}>
+      <input type="file" accept=".mp3" onChange={handleFileChange} />
+      <button onClick={uploadSong}>Prześlij piosenkę</button>
     </div>
   );
 };

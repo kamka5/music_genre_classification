@@ -1,24 +1,24 @@
-// SongUploadForm.js
-
 import React, { useState } from "react";
 import styles from "./SongUpload.module.css";
 
 const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
+    setError(null); // Wyczyść błąd przy zmianie pliku
   };
 
   const uploadSong = () => {
     if (!selectedFile) {
-      console.error("Nie wybrano pliku.");
+      setError("Nie wybrano pliku.");
       return;
     }
 
     if (!selectedFile.name.toLowerCase().endsWith(".mp3")) {
-      console.error("Niewłaściwy format pliku. Proszę przesłać plik MP3.");
+      setError("Niewłaściwy format pliku. Proszę przesłać plik MP3.");
       return;
     }
 
@@ -43,6 +43,7 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
 
   return (
     <div className={styles.container}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {uploadedSong ? (
         <p>Plik {uploadedSong.title} został prawidłowo przesłany.</p>
       ) : (

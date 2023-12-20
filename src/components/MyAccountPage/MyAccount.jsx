@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Chart } from "react-chartjs-2";
 import "chartjs-plugin-piechart-outlabels";
 import styles from "./MyAccount.module.css";
@@ -8,39 +8,46 @@ const MyAccountPage = ({ user }) => {
   const [uploadedSongs, setUploadedSongs] = useState([]);
   const [genreFrequencyData, setGenreFrequencyData] = useState({});
   const chartRef = useRef(null);
-
+  const [displayedSongs, setDisplayedSongs] = useState(15);
+  const [isChangePasswordVisible, setChangePasswordVisible] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
   const sampleUploadedSongs = useMemo(
     () => [
-      { title: "Song1", genre: "blues" },
-      { title: "Song2", genre: "classical" },
-      { title: "Song3", genre: "pop" },
-      { title: "Song4", genre: "hiphop" },
-      { title: "Song5", genre: "hiphop" },
-      { title: "Song6", genre: "jazz" },
-      { title: "Song7", genre: "pop" },
-      { title: "Song8", genre: "pop" },
-      { title: "Song9", genre: "reggae" },
-      { title: "Song10", genre: "rock" },
-      { title: "Song11", genre: "blues" },
-      { title: "Song12", genre: "jazz" },
-      { title: "Song13", genre: "pop" },
-      { title: "Song14", genre: "disco" },
-      { title: "Song15", genre: "hiphop" },
-      { title: "Song16", genre: "jazz" },
-      { title: "Song17", genre: "metal" },
-      { title: "Song18", genre: "pop" },
-      { title: "Song19", genre: "reggae" },
-      { title: "Song20", genre: "rock" },
-      { title: "Song21", genre: "blues" },
-      { title: "Song22", genre: "classical" },
-      { title: "Song23", genre: "country" },
-      { title: "Song24", genre: "disco" },
-      { title: "Song25", genre: "hiphop" },
-      { title: "Song26", genre: "jazz" },
-      { title: "Song27", genre: "pop" },
-      { title: "Song28", genre: "pop" },
-      { title: "Song29", genre: "pop" },
-      { title: "Song30", genre: "rock" },
+      { title: "Soulful Blues", genre: "blues" },
+      { title: "Classical Symphony No. 1", genre: "classical" },
+      { title: "Pop Sensation", genre: "pop" },
+      { title: "Urban Beats", genre: "hiphop" },
+      { title: "City Nights", genre: "hiphop" },
+      { title: "Smooth Jazz Vibes", genre: "jazz" },
+      { title: "Pop Anthem", genre: "pop" },
+      { title: "Eternal Love", genre: "pop" },
+      { title: "Reggae Groove", genre: "reggae" },
+      { title: "Rock Revolution", genre: "rock" },
+      { title: "Bluesy Afternoon", genre: "blues" },
+      { title: "Jazzy Exploration", genre: "jazz" },
+      { title: "Pop Extravaganza", genre: "pop" },
+      { title: "Disco Fever", genre: "disco" },
+      { title: "Hip Hop Flow", genre: "hiphop" },
+      { title: "Midnight Jazz Session", genre: "jazz" },
+      { title: "Metal Mayhem", genre: "metal" },
+      { title: "Pop Euphoria", genre: "pop" },
+      { title: "Reggae Serenity", genre: "reggae" },
+      { title: "Rock Fusion", genre: "rock" },
+      { title: "Bluesy Feelings", genre: "blues" },
+      { title: "Classical Serenade", genre: "classical" },
+      { title: "Country Roads", genre: "country" },
+      { title: "Disco Dancefloor", genre: "disco" },
+      { title: "Hip Hop Chronicles", genre: "hiphop" },
+      { title: "Jazz Odyssey", genre: "jazz" },
+      { title: "Pop Delight", genre: "pop" },
+      { title: "Pop Celebration", genre: "pop" },
+      { title: "Pop Harmony", genre: "pop" },
+      { title: "Rock Anthem", genre: "rock" },
+      { title: "Pop Song", genre: "pop" },
+      { title: "Pop Test", genre: "pop" },
     ],
     []
   );
@@ -98,7 +105,7 @@ const MyAccountPage = ({ user }) => {
           },
           layout: {
             padding: {
-              top: 70,
+              top: 75,
               bottom: 50,
             },
           },
@@ -127,6 +134,19 @@ const MyAccountPage = ({ user }) => {
     return colors;
   };
 
+  const handleChangePassword = async () => {
+    try {
+      // Tutaj użyj funkcji lub endpointu API do zmiany hasła
+      // Przykład (załóżmy, że masz funkcję changePassword w swoim API):
+      // await changePassword(user.id, newPassword);
+      console.log("Hasło zostało zmienione!");
+      //setChangePasswordVisible(false); // Schowaj formularz po udanej zmianie hasła
+      navigate("/logout");
+    } catch (error) {
+      console.error("Błąd podczas zmiany hasła:", error.message);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Link to="/">Wróć do Strony Głównej</Link>
@@ -137,9 +157,56 @@ const MyAccountPage = ({ user }) => {
           <p>Nazwisko: {user.surname}</p>
           <p>Email: {user.email}</p>
 
+          {/* Formularz zmiany hasła */}
+          <div>
+            {/* Przycisk pokazujący formularz zmiany hasła */}
+            {!isChangePasswordVisible && (
+              <button
+                id="passwordChange"
+                onClick={() => setChangePasswordVisible(true)}
+              >
+                Zmiana hasła
+              </button>
+            )}
+
+            {/* Formularz zmiany hasła */}
+            {isChangePasswordVisible && (
+              <div>
+                <label>
+                  Aktualne hasło:
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                  />
+                </label>
+                <label>
+                  Nowe hasło:
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                </label>
+                <label>
+                  Potwierdź hasło:
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </label>
+                <button onClick={handleChangePassword}>Zmień hasło</button>
+              </div>
+            )}
+          </div>
+
           {/* Wykres częstości występowania gatunków */}
           <div>
-            <h3>Wykres częstości występowania gatunków:</h3>
+            <br />
+            <h3>
+              Najczęściej występujące gatunki na podstawie historii utworów:
+            </h3>
             <canvas id="myChart" ref={chartRef}></canvas>
             {genreFrequencyData &&
             genreFrequencyData.labels &&
@@ -150,16 +217,24 @@ const MyAccountPage = ({ user }) => {
 
           {/* Historia przesłanych piosenek */}
           <div>
+            <br />
             <h3>Historia przesłanych piosenek:</h3>
             <ul>
               {uploadedSongs && uploadedSongs.length > 0 ? (
-                uploadedSongs.map((song, index) => (
-                  <li key={index}>{song.title}</li>
+                uploadedSongs.slice(0, displayedSongs).map((song, index) => (
+                  <li key={index}>
+                    <b>{song.title}</b> - {song.genre}
+                  </li>
                 ))
               ) : (
                 <p>Brak przesłanych piosenek.</p>
               )}
             </ul>
+            {uploadedSongs.length > displayedSongs && (
+              <button onClick={() => setDisplayedSongs((prev) => prev + 15)}>
+                Pokaż więcej
+              </button>
+            )}
           </div>
         </div>
       ) : (

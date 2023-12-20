@@ -14,6 +14,10 @@ const HomePage = ({ user }) => {
     year: "",
     genre: "",
   });
+  const [isUploadFormVisible, setIsUploadFormVisible] = useState(true);
+  const [isTagFormVisible, setIsTagFormVisible] = useState(false);
+  const [isUploadSuccessMessageVisible, setIsUploadSuccessMessageVisible] =
+    useState(false);
 
   const handleUploadComplete = (song) => {
     setUploadedSong(song);
@@ -24,6 +28,9 @@ const HomePage = ({ user }) => {
       year: song.year,
       genre: song.genre,
     });
+    setIsUploadFormVisible(false);
+    setIsTagFormVisible(true);
+    setIsUploadSuccessMessageVisible(true);
   };
 
   const handleTagChange = (field, value) => {
@@ -34,15 +41,36 @@ const HomePage = ({ user }) => {
   };
 
   const saveChanges = () => {
-    // Tutaj dodaj logikę zapisywania zmian w tagach na serwerze
-    console.log("Zapisano zmiany w tagach:", editedTags);
+    if (!uploadedSong) {
+      console.error("Nie wybrano pliku. Zapisywanie zmian niemożliwe.");
+      return;
+    }
+
+    // Przykład: Zapisz zmiany tylko jeśli piosenka została przesłana
+    // Tutaj można dodać logikę zapisywania tagów na serwerze
+
+    // Alert informujący użytkownika o pomyślnym zapisaniu tagów
+    alert("Zapisano zmiany w tagach!");
+
+    // Zresetuj stan uploadedSong
+    setUploadedSong(null);
+
+    // Przywróć widoczność formularza uploadu
+    setIsUploadFormVisible(true);
+    setIsTagFormVisible(false);
+  };
+
+  const cancelChanges = () => {
+    setUploadedSong(null);
+    setIsUploadFormVisible(true);
+    setIsTagFormVisible(false);
   };
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.logo}>
-          <h1>MusicApp</h1>
+          <h1>Oznaczanie utworów muzycznych</h1>
         </div>
         <nav className={styles.nav}>
           {!user && (
@@ -61,26 +89,41 @@ const HomePage = ({ user }) => {
         </nav>
       </header>
 
-      <section className={styles.mainContent}>
-        <h1>Witaj na Stronie Głównej!</h1>
+      {isUploadFormVisible && (
+        <section className={styles.mainContent}>
+          <h1>Prześlij i otaguj swoje pliki muzyczne</h1>
 
-        {!user && (
-          <div>
-            <p>Przesyłaj piosenki bez konieczności logowania się.</p>
-            <SongUploadForm onUploadComplete={handleUploadComplete} />
-          </div>
-        )}
+          {!user && (
+            <div>
+              <p>Przesyłaj piosenki bez konieczności logowania się.</p>
+              <SongUploadForm
+                onUploadComplete={handleUploadComplete}
+                uploadedSong={uploadedSong}
+              />
+            </div>
+          )}
 
-        {user && (
-          <div>
-            <h1>Witaj, {user.name}!</h1>
-            <SongUploadForm onUploadComplete={handleUploadComplete} />
-          </div>
-        )}
+          {user && (
+            <div>
+              <h1>Witaj, {user.name}!</h1>
+              <SongUploadForm
+                onUploadComplete={handleUploadComplete}
+                uploadedSong={uploadedSong}
+              />
+            </div>
+          )}
+        </section>
+      )}
 
-        {uploadedSong && (
+      {isTagFormVisible && (
+        <section className={styles.mainContent}>
           <div>
-            <h2>Rozpoznany gatunek: {uploadedSong.genre}</h2>
+            {isUploadSuccessMessageVisible && (
+              <p className={styles.successMessage}>
+                Utwór o nazwie {uploadedSong.title}.mp3 został prawidłowo
+                przesłany.
+              </p>
+            )}
             <h3>Edytuj Tagi:</h3>
             <label>
               Tytuł:
@@ -114,19 +157,18 @@ const HomePage = ({ user }) => {
                 onChange={(e) => handleTagChange("year", e.target.value)}
               />
             </label>
-            <label>
-              Gatunek (automatycznie uzupełniony):
-              <input
-                type="text"
-                value={editedTags.genre}
-                onChange={(e) => handleTagChange("genre", e.target.value)}
-                disabled
-              />
-            </label>
+            <p>
+              <b>
+                Gatunek zostanie rozpoznany i dodany do tagów utworu
+                automatycznie.
+              </b>
+            </p>
+            <br />
             <button onClick={saveChanges}>Zapisz zmiany</button>
+            <button onClick={cancelChanges}>Anuluj zmiany</button>
           </div>
-        )}
-      </section>
+        </section>
+      )}
     </div>
   );
 };

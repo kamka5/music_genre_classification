@@ -24,3 +24,14 @@
 .mainContent {
   margin-top: 20px;
 }
+
+.successMessage {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+button {
+  margin-right: 1%;
+  font-weight: bold;
+}

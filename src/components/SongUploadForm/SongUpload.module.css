@@ -15,13 +15,14 @@
 }
 
 .customUploadButton {
-  padding: 3%;
+  padding: 5%;
   margin: 6%;
   background-color: #464646;
   color: #fff;
   border: none;
   cursor: pointer;
   display: inline-block;
+  border-radius: 10px;
 }
 
 .customUploadButton:hover {

@@ -71,7 +71,12 @@ const HomePage = ({ user }) => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div className={styles.logo}>
+        <div className={styles.logoContainer}>
+          <img
+            className={styles.logo}
+            src={require("../../assets/logo — kopia (2).png")}
+            alt="Logo aplikacji"
+          />
           <h1>Oznaczanie utworów muzycznych</h1>
         </div>
         <nav className={styles.nav}>
@@ -92,15 +97,14 @@ const HomePage = ({ user }) => {
           )}
         </nav>
       </header>
-
       {isUploadFormVisible && (
         <section className={styles.mainContent}>
-          <h1>Prześlij i otaguj swoje pliki muzyczne</h1>
+          <h1>ROZPOZNAJ GATUNEK I OTAGUJ SWOJE PLIKI MUZYCZNE</h1>
 
           {!user && (
             <div>
               <p>
-                Otagowuj bez konieczności logowania się. By zyskać dostęp do
+                Oznaczaj bez konieczności logowania. By zyskać dostęp do
                 historii przesłanych utworów i ich statystyki gatunków
                 muzycznych, pokuś się o założenie konta.
               </p>

@@ -1,14 +1,34 @@
 /* SongUploadForm.module.css */
 
 .container {
-  margin-top: 20px;
+  display: grid;
+  justify-content: center;
 }
 
-input[type="file"] {
-  margin-bottom: 10px;
+.formContent {
+  text-align: center;
+  padding-top: 5%;
 }
 
-button {
+.fileInput {
+  display: none;
+}
+
+.customUploadButton {
+  padding: 3%;
+  margin: 6%;
+  background-color: #464646;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.customUploadButton:hover {
+  background-color: #242424;
+}
+
+.uploadButton {
   padding: 10px;
   background-color: #3498db;
   color: #fff;
@@ -16,6 +36,11 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.uploadButton:hover {
   background-color: #2980b9;
+}
+
+.successMessage {
+  color: #4CAF50;
+  font-weight: bold;
 }

@@ -1,24 +1,55 @@
-/* HomePage.module.css */
+/* Dodaj do istniejącego pliku CSS/SCSS */
 
 .container {
   width: 80%;
   margin: 0 auto;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
+  padding: 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #000;
 }
 
-.logo h1 {
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 11%;
+  height: auto;
+  margin-right: 2%;
+}
+
+h1 {
+  padding-top: 2%;
+  padding-bottom: 1%;
   margin: 0;
+  text-align: center;
+  font-size: 1.5em;
 }
 
-.nav div {
-  display: inline-block;
-  margin-left: 10px;
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+nav div {
+  margin-right: 10px;
+}
+
+nav a {
+  text-decoration: none;
+  color: rgb(62, 62, 62);
+}
+
+nav a:hover {
+  text-decoration: underline;
 }
 
 .mainContent {

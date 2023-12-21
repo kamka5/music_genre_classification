@@ -41,16 +41,35 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
     setSelectedFile(null);
   };
 
+  // SongUploadForm component
+  // SongUploadForm component
   return (
     <div className={styles.container}>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {uploadedSong ? (
-        <p>Plik {uploadedSong.title} został prawidłowo przesłany.</p>
+        <p className={styles.successMessage}>
+          Plik {uploadedSong.title} został prawidłowo przesłany.
+        </p>
       ) : (
-        <>
-          <input type="file" accept=".mp3" onChange={handleFileChange} />
-          <button onClick={uploadSong}>Prześlij piosenkę</button>
-        </>
+        <div className={styles.formContent}>
+          <label htmlFor="fileInput" className={styles.customUploadButton}>
+            {selectedFile
+              ? selectedFile.name
+              : "Wybierz plik mp3 do przesłania"}
+          </label>
+          <input
+            type="file"
+            id="fileInput"
+            className={styles.fileInput}
+            accept=".mp3"
+            onChange={handleFileChange}
+          />
+          {selectedFile && (
+            <button onClick={uploadSong} className={styles.uploadButton}>
+              Prześlij piosenkę
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

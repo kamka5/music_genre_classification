@@ -84,13 +84,17 @@ const HomePage = ({ user }) => {
             <div>
               <Link to="/login">Zaloguj się</Link>
               <span> | </span>
-              <Link to="/register">Zarejestruj się</Link>
+              <Link to="/register" className={styles.registerLink}>
+                Zarejestruj się
+              </Link>
             </div>
           )}
 
           {user && (
             <div>
-              <Link to="/my-account">Moje Konto</Link>
+              <Link to="/my-account" className={styles.myAccountLink}>
+                Moje Konto
+              </Link>
               <span> | </span>
               <Link to="/logout">Wyloguj</Link>
             </div>
@@ -126,7 +130,6 @@ const HomePage = ({ user }) => {
           )}
         </section>
       )}
-
       {isTagFormVisible && (
         <section className={styles.mainContent}>
           <div>

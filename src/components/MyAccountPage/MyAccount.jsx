@@ -156,7 +156,7 @@ const MyAccountPage = ({ user }) => {
           <p>Imię: {user.name}</p>
           <p>Nazwisko: {user.surname}</p>
           <p>Email: {user.email}</p>
-
+          <br />
           {/* Formularz zmiany hasła */}
           <div>
             {/* Przycisk pokazujący formularz zmiany hasła */}

@@ -66,3 +66,27 @@ button {
   margin-right: 1%;
   font-weight: bold;
 }
+
+/* Arkusz stylów (styles.css) */
+
+.registerLink {
+  background-color: #3498db; /* Zielony kolor tła dla "Zarejestruj się" */
+  color: #fff; /* Biały kolor tekstu */
+  padding: 5px 10px; /* Dodatkowe wypełnienie */
+  border-radius: 5px; /* Zakrąglenie krawędzi */
+  text-decoration: none; /* Usunięcie podkreślenia tekstu (domyślnie dla linków) */
+}
+
+.myAccountLink {
+  background-color: #3498db; /* Niebieski kolor tła dla "Moje Konto" */
+  color: #fff; /* Biały kolor tekstu */
+  padding: 5px 10px; /* Dodatkowe wypełnienie */
+  border-radius: 5px; /* Zakrąglenie krawędzi */
+  text-decoration: none; /* Usunięcie podkreślenia tekstu (domyślnie dla linków) */
+}
+
+/* Dodatkowy styl dla linków, gdy najedziemy na nie myszką */
+.registerLink:hover,
+.myAccountLink:hover {
+  background-color: #267fbb; /* Ciemniejszy zielony lub niebieski kolor tła po najechaniu myszką */
+}

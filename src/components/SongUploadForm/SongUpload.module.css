@@ -32,6 +32,7 @@
 .uploadButton {
   padding: 10px;
   background-color: #3498db;
+  font-size: 1.1em;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -42,6 +43,6 @@
 }
 
 .successMessage {
-  color: #4CAF50;
+  color: #00325a;
   font-weight: bold;
 }

@@ -197,6 +197,9 @@ const MyAccountPage = ({ user }) => {
                   />
                 </label>
                 <button onClick={handleChangePassword}>Zmień hasło</button>
+                <button onClick={() => setChangePasswordVisible(false)}>
+                  Anuluj
+                </button>
               </div>
             )}
           </div>
@@ -223,7 +226,8 @@ const MyAccountPage = ({ user }) => {
               {uploadedSongs && uploadedSongs.length > 0 ? (
                 uploadedSongs.slice(0, displayedSongs).map((song, index) => (
                   <li key={index}>
-                    <b>{song.title}</b> - {song.genre}
+                    <b className={styles.songTitlesList}>{song.title}</b> -{" "}
+                    {song.genre}
                   </li>
                 ))
               ) : (

@@ -10,9 +10,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding-top: 1%;
+  padding-bottom: 0.5%;
   background-color: #ffffff;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #001c50;
 }
 
 .logoContainer {
@@ -21,17 +22,24 @@
 }
 
 .logo {
-  width: 11%;
+  width: 10%;
   height: auto;
-  margin-right: 2%;
+  margin-right: 3%;
 }
 
 h1 {
-  padding-top: 2%;
-  padding-bottom: 1%;
   margin: 0;
   text-align: center;
   font-size: 1.5em;
+}
+
+.pageTitle {
+  color: #001c50;
+}
+
+.h1Content{
+  padding-top: 2%;
+  padding-bottom: 5%;
 }
 
 .nav {
@@ -57,7 +65,7 @@ nav a:hover {
 }
 
 .successMessage {
-  color: green;
+  color: rgb(0, 16, 137);
   font-weight: bold;
   margin-bottom: 10px;
 }

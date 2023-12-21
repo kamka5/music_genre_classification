@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SongUploadForm from "../SongUploadForm/SongUpload";
 import styles from "./Home.module.css"; // Zaimportuj plik ze stylami
+import NotificationComponent from "../NotificationComponent/Notification";
 
 const HomePage = ({ user }) => {
   const [uploadedSong, setUploadedSong] = useState(null);
@@ -18,6 +19,7 @@ const HomePage = ({ user }) => {
   const [isTagFormVisible, setIsTagFormVisible] = useState(false);
   const [isUploadSuccessMessageVisible, setIsUploadSuccessMessageVisible] =
     useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
 
   const handleUploadComplete = (song) => {
     setUploadedSong(song);
@@ -50,9 +52,20 @@ const HomePage = ({ user }) => {
     // Tutaj można dodać logikę zapisywania tagów na serwerze
 
     // Alert informujący użytkownika o pomyślnym zapisaniu tagów
-    alert(
-      "Zapisano zmiany w tagach! \nWykryty i przypisany najbliższy gatunek - pop 67.21%. \n\nInne korelacje: disco - 23.55%, jazz - 8,07%, classical - 1,17%"
-    );
+    setNotificationMessage(`
+    <b>Zmiany w tagach zostały zapisane!</b> <br/><br/>
+    <b>Tagi wprowadzone przez użytkownika:</b> <br/>
+    Tytuł: ${editedTags.title} <br/>
+    Wykonawca: ${editedTags.artist} <br/>
+    Album: ${editedTags.album} <br/>
+    Rok wydania: ${editedTags.year || "brak informacji"}<br/>
+    <b>Przypisany gatunek - pop 67.21%</b> <br/><br/>
+    Inne korelacje: <br/>
+    disco - 23.55%, <br/>
+    jazz - 8,07%, ,<br/>
+    classical - 1,17% <br/>
+    <br/> 
+  `);
 
     // Zresetuj stan uploadedSong
     setUploadedSong(null);
@@ -60,6 +73,10 @@ const HomePage = ({ user }) => {
     // Przywróć widoczność formularza uploadu
     setIsUploadFormVisible(true);
     setIsTagFormVisible(false);
+  };
+
+  const closeNotification = () => {
+    setNotificationMessage("");
   };
 
   const cancelChanges = () => {
@@ -74,10 +91,10 @@ const HomePage = ({ user }) => {
         <div className={styles.logoContainer}>
           <img
             className={styles.logo}
-            src={require("../../assets/logo — kopia (2).png")}
+            src={require("../../assets/logo.png")}
             alt="Logo aplikacji"
           />
-          <h1>Oznaczanie utworów muzycznych</h1>
+          <h1 className={styles.pageTitle}>Oznaczanie utworów muzycznych</h1>
         </div>
         <nav className={styles.nav}>
           {!user && (
@@ -103,7 +120,9 @@ const HomePage = ({ user }) => {
       </header>
       {isUploadFormVisible && (
         <section className={styles.mainContent}>
-          <h1>ROZPOZNAJ GATUNEK I OTAGUJ SWOJE PLIKI MUZYCZNE</h1>
+          <h1 className={styles.h1Content}>
+            ROZPOZNAJ GATUNEK I OTAGUJ SWOJE PLIKI MUZYCZNE
+          </h1>
 
           {!user && (
             <div>
@@ -121,7 +140,7 @@ const HomePage = ({ user }) => {
 
           {user && (
             <div>
-              <h1>Witaj, {user.name}!</h1>
+              <h1>Witaj {user.name},</h1>
               <SongUploadForm
                 onUploadComplete={handleUploadComplete}
                 uploadedSong={uploadedSong}
@@ -174,15 +193,23 @@ const HomePage = ({ user }) => {
             </label>
             <p>
               <b>
-                Gatunek zostanie rozpoznany i dodany do tagów utworu
-                automatycznie.
+                Gatunku nie musisz wprowadzać &#128522;
+                <br />
               </b>
+              Zostanie on rozpoznany i dodany do tagów utworu automatycznie.
             </p>
             <br />
             <button onClick={saveChanges}>Zapisz zmiany</button>
             <button onClick={cancelChanges}>Anuluj zmiany</button>
           </div>
         </section>
+      )}
+      {/* Dodaj komponent powiadomień */}
+      {notificationMessage && (
+        <NotificationComponent
+          message={notificationMessage}
+          onClose={closeNotification}
+        />
       )}
     </div>
   );

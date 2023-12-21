@@ -55,7 +55,7 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
           <label htmlFor="fileInput" className={styles.customUploadButton}>
             {selectedFile
               ? selectedFile.name
-              : "Wybierz plik mp3 do przesłania"}
+              : "Wybierz plik mp3 do przesłania..."}
           </label>
           <input
             type="file"

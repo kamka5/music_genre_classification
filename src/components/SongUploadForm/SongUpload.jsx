@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styles from "./SongUpload.module.css";
 
 const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
@@ -8,10 +9,10 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
-    setError(null); // Wyczyść błąd przy zmianie pliku
+    setError(null);
   };
 
-  const uploadSong = () => {
+  const uploadSong = async () => {
     if (!selectedFile) {
       setError("Nie wybrano pliku.");
       return;
@@ -22,27 +23,33 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
       return;
     }
 
-    // Tutaj można dodać logikę przesyłania pliku na serwer
-    // Po zakończeniu przesyłania pliku można uzyskać informacje o piosence z serwera
+    try {
+      const reader = new FileReader();
 
-    // Przykładowe informacje o piosence
-    const mockSongInfo = {
-      title: selectedFile.name.replace(/\.[^/.]+$/, ""),
-      artist: "Przykładowy Artysta",
-      album: "Przykładowy Album",
-      year: "2023",
-      genre: "Pop",
-    };
+      reader.onload = async (event) => {
+        const base64data = event.target.result;
 
-    // Wywołaj funkcję przekazaną z props, aby przekazać informacje o piosence do komponentu nadrzędnego
-    onUploadComplete(mockSongInfo);
+        // W tym miejscu umieść odpowiednią ścieżkę URL serwera, który obsługuje przesyłanie pliku
+        const response = await axios.post("URL_DO_SERWERA", {
+          file: base64data,
+        });
+
+        // Odpowiedź z serwera zawierać może informacje o przesłanej piosence
+        const uploadedSongInfo = response.data;
+
+        onUploadComplete(uploadedSongInfo);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    } catch (error) {
+      console.error("Błąd podczas przesyłania pliku:", error);
+      setError("Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.");
+    }
 
     // Opcjonalnie: Zresetuj stan komponentu, aby umożliwić ponowne przesyłanie plików
     setSelectedFile(null);
   };
 
-  // SongUploadForm component
-  // SongUploadForm component
   return (
     <div className={styles.container}>
       {error && <p style={{ color: "red" }}>{error}</p>}

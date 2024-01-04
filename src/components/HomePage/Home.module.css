@@ -140,7 +140,7 @@ nav a:hover {
 
 @media (max-width: 768px) {
   .logo {
-    width: 16%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+    width: 15%; /* Dostosuj szerokość logo dla mniejszych ekranów */
   }
   .mainContent{
     margin-top: 6%;
@@ -155,7 +155,7 @@ nav a:hover {
 
 @media (max-width: 500px) {
   .logo {
-    width: 20%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+    width: 19%; /* Dostosuj szerokość logo dla mniejszych ekranów */
   }
   .container{
     max-width: 96%;

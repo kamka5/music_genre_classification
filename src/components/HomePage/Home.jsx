@@ -1,7 +1,6 @@
-// HomePage.js - główna strona aplikacji
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
 import styles from "./Home.module.css"; // Zaimportuj plik ze stylami
 import NotificationComponent from "../NotificationComponent/Notification";
@@ -86,132 +85,160 @@ const HomePage = ({ user }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.logoContainer}>
-          <img
-            className={styles.logo}
-            src={require("../../assets/logo.png")}
-            alt="Logo aplikacji"
-          />
-          <h1 className={styles.pageTitle}>Oznaczanie utworów muzycznych</h1>
-        </div>
-        <nav className={styles.nav}>
-          {!user && (
-            <div>
-              <Link to="/login">Zaloguj się</Link>
-              <span> | </span>
-              <Link to="/register" className={styles.registerLink}>
-                Zarejestruj się
-              </Link>
+    <Container className={styles.container}>
+      <Row>
+        <Col>
+          <header className={styles.header}>
+            <div className={styles.logoContainer}>
+              <img
+                className={styles.logo}
+                src={require("../../assets/logo.png")}
+                alt="Logo aplikacji"
+              />
+              <h1 className={styles.pageTitle}>
+                Oznaczanie utworów muzycznych
+              </h1>
             </div>
-          )}
+            <nav className={styles.nav}>
+              {!user && (
+                <div className="d-flex">
+                  <Link to="/login" className={`${styles.loginLink} mr-2`}>
+                    Zaloguj się
+                  </Link>
+                  <Link
+                    to="/register"
+                    className={`${styles.registerLink} ml-2`}
+                  >
+                    Zarejestruj się
+                  </Link>
+                </div>
+              )}
 
-          {user && (
-            <div>
-              <Link to="/my-account" className={styles.myAccountLink}>
-                Moje Konto
-              </Link>
-              <span> | </span>
-              <Link to="/logout">Wyloguj</Link>
-            </div>
-          )}
-        </nav>
-      </header>
+              {user && (
+                <div>
+                  <Link to="/my-account" className={styles.myAccountLink}>
+                    Moje Konto
+                  </Link>
+                  <Link to="/logout" className={styles.logoutLink}>
+                    Wyloguj
+                  </Link>
+                </div>
+              )}
+            </nav>
+          </header>
+        </Col>
+      </Row>
+
       {isUploadFormVisible && (
-        <section className={styles.mainContent}>
-          <h1 className={styles.h1Content}>
-            ROZPOZNAJ GATUNEK I OTAGUJ SWOJE PLIKI MUZYCZNE
-          </h1>
+        <Row>
+          <Col>
+            <section className={styles.mainContent}>
+              <h1 className={styles.h1Content}>
+                ROZPOZNAJ GATUNEK I OTAGUJ SWOJE PLIKI MUZYCZNE
+              </h1>
 
-          {!user && (
-            <div>
-              <p>
-                Oznaczaj bez konieczności logowania. By zyskać dostęp do
-                historii przesłanych utworów i ich statystyki gatunków
-                muzycznych, pokuś się o założenie konta.
-              </p>
-              <SongUploadForm
-                onUploadComplete={handleUploadComplete}
-                uploadedSong={uploadedSong}
-              />
-            </div>
-          )}
+              {!user && (
+                <div>
+                  <p>
+                    Oznaczaj bez konieczności logowania. By zyskać dostęp do
+                    historii przesłanych utworów i ich statystyki gatunków
+                    muzycznych, pokuś się o założenie konta.
+                  </p>
+                  <SongUploadForm
+                    onUploadComplete={handleUploadComplete}
+                    uploadedSong={uploadedSong}
+                  />
+                </div>
+              )}
 
-          {user && (
-            <div>
-              <h1>Witaj {user.name},</h1>
-              <SongUploadForm
-                onUploadComplete={handleUploadComplete}
-                uploadedSong={uploadedSong}
-              />
-            </div>
-          )}
-        </section>
+              {user && (
+                <div>
+                  <h1>Witaj {user.name},</h1>
+                  <SongUploadForm
+                    onUploadComplete={handleUploadComplete}
+                    uploadedSong={uploadedSong}
+                  />
+                </div>
+              )}
+            </section>
+          </Col>
+        </Row>
       )}
+
       {isTagFormVisible && (
-        <section className={styles.mainContent}>
-          <div>
-            {isUploadSuccessMessageVisible && (
-              <p className={styles.successMessage}>
-                Utwór o nazwie {uploadedSong.title}.mp3 został prawidłowo
-                przesłany.
-              </p>
-            )}
-            <h3>Edytuj Tagi:</h3>
-            <label>
-              Tytuł:
-              <input
-                type="text"
-                value={editedTags.title}
-                onChange={(e) => handleTagChange("title", e.target.value)}
-              />
-            </label>
-            <label>
-              Wykonawca:
-              <input
-                type="text"
-                value={editedTags.artist}
-                onChange={(e) => handleTagChange("artist", e.target.value)}
-              />
-            </label>
-            <label>
-              Album:
-              <input
-                type="text"
-                value={editedTags.album}
-                onChange={(e) => handleTagChange("album", e.target.value)}
-              />
-            </label>
-            <label>
-              Rok wydania:
-              <input
-                type="text"
-                value={editedTags.year}
-                onChange={(e) => handleTagChange("year", e.target.value)}
-              />
-            </label>
-            <p>
-              <b>
-                Gatunku nie musisz wprowadzać &#128522;
+        <Row>
+          <Col>
+            <section className={styles.mainContent}>
+              <div>
+                {isUploadSuccessMessageVisible && (
+                  <p className={styles.successMessage}>
+                    Utwór o nazwie {uploadedSong.title}.mp3 został prawidłowo
+                    przesłany.
+                  </p>
+                )}
+                <h3>Edytuj Tagi:</h3>
+                <label>
+                  Tytuł:
+                  <input
+                    type="text"
+                    value={editedTags.title}
+                    onChange={(e) => handleTagChange("title", e.target.value)}
+                  />
+                </label>
+                <label>
+                  Wykonawca:
+                  <input
+                    type="text"
+                    value={editedTags.artist}
+                    onChange={(e) => handleTagChange("artist", e.target.value)}
+                  />
+                </label>
+                <label>
+                  Album:
+                  <input
+                    type="text"
+                    value={editedTags.album}
+                    onChange={(e) => handleTagChange("album", e.target.value)}
+                  />
+                </label>
+                <label>
+                  Rok wydania:
+                  <input
+                    type="text"
+                    value={editedTags.year}
+                    onChange={(e) => handleTagChange("year", e.target.value)}
+                  />
+                </label>
+                <p>
+                  <b>Gatunku nie musisz wprowadzać 😊</b>
+                  <br />
+                  Zostanie on rozpoznany i dodany do tagów utworu automatycznie.
+                </p>
                 <br />
-              </b>
-              Zostanie on rozpoznany i dodany do tagów utworu automatycznie.
-            </p>
-            <br />
-            <button onClick={saveChanges}>Zapisz zmiany</button>
-            <button onClick={cancelChanges}>Anuluj zmiany</button>
-          </div>
-        </section>
+                <Button variant="primary" onClick={saveChanges}>
+                  Zapisz zmiany
+                </Button>
+                <Button variant="secondary" onClick={cancelChanges}>
+                  Anuluj zmiany
+                </Button>
+              </div>
+            </section>
+          </Col>
+        </Row>
       )}
+
       {/* Dodaj komponent powiadomień */}
       {notificationMessage && (
-        <NotificationComponent
-          message={notificationMessage}
-          onClose={closeNotification}
-        />
+        <Row>
+          <Col>
+            <NotificationComponent
+              message={notificationMessage}
+              onClose={closeNotification}
+            />
+          </Col>
+        </Row>
       )}
-    </div>
+    </Container>
   );
 };
 

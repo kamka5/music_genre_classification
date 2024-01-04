@@ -1,17 +1,19 @@
 /* Dodaj do istniejącego pliku CSS/SCSS */
 
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .container {
-  width: 80%;
+  max-width: 80%;
   margin: 0 auto;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1.5%;
-  padding-bottom: 0.75%;
+  padding: 1.5% 0.75%;
   background-color: #ffffff;
   border-bottom: 1px solid #001c50;
 }
@@ -38,7 +40,7 @@ h1 {
   font-size: 2.3em;
 }
 
-.h1Content{
+.h1Content {
   padding-top: 2%;
   padding-bottom: 5%;
 }
@@ -48,8 +50,8 @@ h1 {
   align-items: center;
 }
 
-nav div {
-  margin-right: 10px;
+.nav div {
+  margin-right: 0.6em;
 }
 
 nav a {
@@ -69,34 +71,94 @@ nav a:hover {
 .successMessage {
   color: rgb(0, 16, 137);
   font-weight: bold;
-  margin-bottom: 10px;
-}
-
-button {
-  margin-right: 1%;
-  font-weight: bold;
+  margin-bottom: 0.6em;
 }
 
 /* Arkusz stylów (styles.css) */
 
+.registerLink,
+.myAccountLink {
+  display: inline-block;
+  padding: 0.3em;
+  border-radius: 0.3em;
+  text-decoration: none;
+}
+
+.loginLink,
+.logoutLink{
+  padding: 0.3em;
+}
+
 .registerLink {
   background-color: #3498db; /* Zielony kolor tła dla "Zarejestruj się" */
   color: #fff; /* Biały kolor tekstu */
-  padding: 5px 10px; /* Dodatkowe wypełnienie */
-  border-radius: 5px; /* Zakrąglenie krawędzi */
-  text-decoration: none; /* Usunięcie podkreślenia tekstu (domyślnie dla linków) */
 }
 
 .myAccountLink {
   background-color: #3498db; /* Niebieski kolor tła dla "Moje Konto" */
   color: #fff; /* Biały kolor tekstu */
-  padding: 5px 10px; /* Dodatkowe wypełnienie */
-  border-radius: 5px; /* Zakrąglenie krawędzi */
-  text-decoration: none; /* Usunięcie podkreślenia tekstu (domyślnie dla linków) */
 }
 
 /* Dodatkowy styl dla linków, gdy najedziemy na nie myszką */
 .registerLink:hover,
 .myAccountLink:hover {
   background-color: #267fbb; /* Ciemniejszy zielony lub niebieski kolor tła po najechaniu myszką */
+}
+
+/* Media queries dla responsywności */
+@media (max-width: 1300px) {
+  .logo {
+    width: 9%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+  .container{
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 1080px) {
+  .logo {
+    width: 10.5%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+}
+
+@media (max-width: 880px) {
+  .logo {
+    width: 12%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+  .registerLink,
+  .loginLink,
+  .logoutLink,
+  .myAccountLink{
+    font-size: 1.1em;
+    padding: 0.3em;
+    white-space: nowrap;
+  }
+  .container{
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 16%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+  .mainContent{
+    margin-top: 6%;
+  }
+  h1{
+    font-size: 1.16em;
+  }
+  .header{
+    font-size: 0.65em;
+  }
+}
+
+@media (max-width: 500px) {
+  .logo {
+    width: 20%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+  .container{
+    max-width: 96%;
+  }
+  
 }

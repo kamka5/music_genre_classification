@@ -1,8 +1,10 @@
+// MyAccountPage.jsx
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Chart } from "react-chartjs-2";
 import "chartjs-plugin-piechart-outlabels";
 import styles from "./MyAccount.module.css";
+import SongList from "./SongList"; // Nowy komponent
 
 const MyAccountPage = ({ user }) => {
   const [uploadedSongs, setUploadedSongs] = useState([]);
@@ -53,10 +55,8 @@ const MyAccountPage = ({ user }) => {
   );
 
   useEffect(() => {
-    // Symulacja pobierania historii przesłanych piosenek z bazy danych
     setUploadedSongs(sampleUploadedSongs);
 
-    // Przygotowanie danych do wykresu - częstość występowania gatunków
     const genreFrequency = sampleUploadedSongs.reduce((acc, song) => {
       acc[song.genre] = (acc[song.genre] || 0) + 1;
       return acc;
@@ -86,7 +86,6 @@ const MyAccountPage = ({ user }) => {
       chartInstance.destroy();
     }
 
-    // Renderowanie nowego wykresu typu pie chart
     if (
       genreFrequencyData &&
       genreFrequencyData.labels &&
@@ -125,10 +124,9 @@ const MyAccountPage = ({ user }) => {
   }, [genreFrequencyData]);
 
   const generateColors = (count) => {
-    // Funkcja generująca kolorowe tła dla każdego gatunku
     const colors = [];
     for (let i = 0; i < count; i++) {
-      const hue = (i * (360 / count)) % 360; // Rozłożenie kolorów w przestrzeni barw
+      const hue = (i * (360 / count)) % 360;
       colors.push(`hsla(${hue}, 70%, 50%, 0.7)`);
     }
     return colors;
@@ -136,15 +134,23 @@ const MyAccountPage = ({ user }) => {
 
   const handleChangePassword = async () => {
     try {
-      // Tutaj użyj funkcji lub endpointu API do zmiany hasła
-      // Przykład (załóżmy, że masz funkcję changePassword w swoim API):
-      // await changePassword(user.id, newPassword);
       console.log("Hasło zostało zmienione!");
-      //setChangePasswordVisible(false); // Schowaj formularz po udanej zmianie hasła
       navigate("/logout");
     } catch (error) {
       console.error("Błąd podczas zmiany hasła:", error.message);
     }
+  };
+
+  const handleSongClick = (song) => {
+    navigate("/tagged-song-info", { state: { editedTags: song } });
+  };
+
+  const handleShowMore = () => {
+    const newDisplayedSongs = Math.min(
+      displayedSongs + 15,
+      uploadedSongs.length
+    );
+    setDisplayedSongs(newDisplayedSongs);
   };
 
   return (
@@ -157,9 +163,7 @@ const MyAccountPage = ({ user }) => {
           <p>Nazwisko: {user.surname}</p>
           <p>Email: {user.email}</p>
           <br />
-          {/* Formularz zmiany hasła */}
           <div>
-            {/* Przycisk pokazujący formularz zmiany hasła */}
             {!isChangePasswordVisible && (
               <button
                 id="passwordChange"
@@ -168,8 +172,6 @@ const MyAccountPage = ({ user }) => {
                 Zmiana hasła
               </button>
             )}
-
-            {/* Formularz zmiany hasła */}
             {isChangePasswordVisible && (
               <div>
                 <label>
@@ -203,8 +205,6 @@ const MyAccountPage = ({ user }) => {
               </div>
             )}
           </div>
-
-          {/* Wykres częstości występowania gatunków */}
           <div>
             <br />
             <h3>
@@ -217,27 +217,18 @@ const MyAccountPage = ({ user }) => {
               <p>Brak danych do wygenerowania wykresu.</p>
             )}
           </div>
-
-          {/* Historia przesłanych piosenek */}
           <div>
             <br />
             <h3>Historia przesłanych piosenek:</h3>
-            <ul>
-              {uploadedSongs && uploadedSongs.length > 0 ? (
-                uploadedSongs.slice(0, displayedSongs).map((song, index) => (
-                  <li key={index}>
-                    <b className={styles.songTitlesList}>{song.title}</b> -{" "}
-                    {song.genre}
-                  </li>
-                ))
-              ) : (
-                <p>Brak przesłanych piosenek.</p>
-              )}
-            </ul>
+            <SongList
+              songs={uploadedSongs.slice(0, displayedSongs)}
+              onSongClick={handleSongClick}
+            />
             {uploadedSongs.length > displayedSongs && (
-              <button onClick={() => setDisplayedSongs((prev) => prev + 15)}>
-                Pokaż więcej
-              </button>
+              <button onClick={handleShowMore}>Pokaż więcej</button>
+            )}
+            {uploadedSongs.length <= displayedSongs && (
+              <p>Nie ma więcej utworów do wyświetlenia.</p>
             )}
           </div>
         </div>

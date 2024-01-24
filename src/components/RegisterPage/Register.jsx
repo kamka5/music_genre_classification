@@ -31,6 +31,15 @@ const RegisterPage = ({ setUser }) => {
 
     if (!password) {
       errors.password = "Pole Hasło jest wymagane.";
+    } else if (password.length < 8) {
+      errors.password = "Hasło musi zawierać co najmniej 8 znaków.";
+    } else if (
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(
+        password
+      )
+    ) {
+      errors.password =
+        "Hasło powinno zawierać co najmniej jedną małą literę, jedną wielką literę, jedną cyfrę i jeden znak specjalny.";
     }
 
     return errors;

@@ -1,0 +1,20 @@
+/* TaggedSongInfo.module.css */
+
+.container {
+  margin-top: 20px;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+strong {
+  color: #007bff;
+}
+
+p {
+  margin-bottom: 10px;
+}
+
+/* Add more styles as needed */

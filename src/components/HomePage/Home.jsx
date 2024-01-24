@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
 import styles from "./Home.module.css"; // Zaimportuj plik ze stylami
@@ -19,6 +19,7 @@ const HomePage = ({ user }) => {
   const [isUploadSuccessMessageVisible, setIsUploadSuccessMessageVisible] =
     useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const navigate = useNavigate(); // Dodaj useNavigate
 
   const handleUploadComplete = (song) => {
     setUploadedSong(song);
@@ -47,24 +48,8 @@ const HomePage = ({ user }) => {
       return;
     }
 
-    // Przykład: Zapisz zmiany tylko jeśli piosenka została przesłana
     // Tutaj można dodać logikę zapisywania tagów na serwerze
-
-    // Alert informujący użytkownika o pomyślnym zapisaniu tagów
-    setNotificationMessage(`
-    <b>Zmiany w tagach zostały zapisane!</b> <br/><br/>
-    <b>Tagi wprowadzone przez użytkownika:</b> <br/>
-    Tytuł: ${editedTags.title} <br/>
-    Wykonawca: ${editedTags.artist} <br/>
-    Album: ${editedTags.album} <br/>
-    Rok wydania: ${editedTags.year || "brak informacji"}<br/>
-    <b>Przypisany gatunek - pop 67.21%</b> <br/><br/>
-    Inne korelacje: <br/>
-    disco - 23.55%, <br/>
-    jazz - 8,07%, ,<br/>
-    classical - 1,17% <br/>
-    <br/> 
-  `);
+    // ...
 
     // Zresetuj stan uploadedSong
     setUploadedSong(null);
@@ -72,6 +57,9 @@ const HomePage = ({ user }) => {
     // Przywróć widoczność formularza uploadu
     setIsUploadFormVisible(true);
     setIsTagFormVisible(false);
+
+    // Przejdź na nową stronę po zapisaniu zmian
+    navigate("/tagged-song-info", { state: { editedTags } });
   };
 
   const closeNotification = () => {
@@ -171,10 +159,13 @@ const HomePage = ({ user }) => {
             <section className={styles.mainContent}>
               <div>
                 {isUploadSuccessMessageVisible && (
-                  <p className={styles.successMessage}>
+                  <Link
+                    to="/tagged-song-info"
+                    className={styles.successMessage}
+                  >
                     Utwór o nazwie {uploadedSong.title}.mp3 został prawidłowo
                     przesłany.
-                  </p>
+                  </Link>
                 )}
                 <h3>Edytuj Tagi:</h3>
                 <label>

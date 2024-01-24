@@ -65,7 +65,7 @@ nav a:hover {
 }
 
 .mainContent {
-  margin-top: 3%;
+  margin-top: 7%;
 }
 
 .successMessage {
@@ -105,6 +105,35 @@ nav a:hover {
   background-color: #267fbb; /* Ciemniejszy zielony lub niebieski kolor tła po najechaniu myszką */
 }
 
+.albumCoversContainer {
+  bottom: 1%;
+  margin-left: -10%;
+  overflow: hidden;
+  position: fixed;
+}
+
+.albumCovers {
+  display: flex;
+  animation: scrollAlbums 200s linear forwards;
+}
+
+@keyframes scrollAlbums {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% * 6.9));
+  }
+}
+
+.albumCover {
+  width: 6.5%;
+  flex: 0 0 auto;
+  margin-right: 2%;
+  margin-left: 1%;
+}
+
+
 /* Media queries dla responsywności */
 @media (max-width: 1300px) {
   .logo {
@@ -118,6 +147,17 @@ nav a:hover {
 @media (max-width: 1080px) {
   .logo {
     width: 10.5%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+  .albumCover {
+    width: 8.5%;
+  }
+  @keyframes scrollAlbums {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% * 8));
+    }
   }
 }
 
@@ -160,5 +200,15 @@ nav a:hover {
   .container{
     max-width: 96%;
   }
-  
+  .albumCover {
+    width: 13%;
+  }
+  @keyframes scrollAlbums {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% * 11.5));
+    }
+  }
 }

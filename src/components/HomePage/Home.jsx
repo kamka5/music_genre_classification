@@ -5,6 +5,14 @@ import SongUploadForm from "../SongUploadForm/SongUpload";
 import styles from "./Home.module.css"; // Zaimportuj plik ze stylami
 import NotificationComponent from "../NotificationComponent/Notification";
 
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
 const HomePage = ({ user }) => {
   const [uploadedSong, setUploadedSong] = useState(null);
   const [editedTags, setEditedTags] = useState({
@@ -72,6 +80,16 @@ const HomePage = ({ user }) => {
     setIsTagFormVisible(false);
   };
 
+  const indices = Array.from({ length: 70 }, (_, index) => index + 1);
+
+  // Tasuj tablicę liczb
+  const shuffledIndices = shuffleArray(indices);
+
+  // Utwórz tablicę okładek z użyciem tasowanych indeksów
+  const albumCovers = shuffledIndices.map((index) =>
+    require(`../../assets/coverImages/${index}.jpg`)
+  );
+
   return (
     <Container className={styles.container}>
       <Row>
@@ -116,7 +134,6 @@ const HomePage = ({ user }) => {
           </header>
         </Col>
       </Row>
-
       {isUploadFormVisible && (
         <Row>
           <Col>
@@ -152,7 +169,6 @@ const HomePage = ({ user }) => {
           </Col>
         </Row>
       )}
-
       {isTagFormVisible && (
         <Row>
           <Col>
@@ -217,7 +233,6 @@ const HomePage = ({ user }) => {
           </Col>
         </Row>
       )}
-
       {/* Dodaj komponent powiadomień */}
       {notificationMessage && (
         <Row>
@@ -226,6 +241,24 @@ const HomePage = ({ user }) => {
               message={notificationMessage}
               onClose={closeNotification}
             />
+          </Col>
+        </Row>
+      )}
+      {!isUploadFormVisible ? null : (
+        <Row>
+          <Col>
+            <div className={styles.albumCoversContainer}>
+              <div className={styles.albumCovers}>
+                {albumCovers.map((cover, index) => (
+                  <img
+                    key={index}
+                    className={styles.albumCover}
+                    src={cover}
+                    alt={`Okładka albumu ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </Col>
         </Row>
       )}

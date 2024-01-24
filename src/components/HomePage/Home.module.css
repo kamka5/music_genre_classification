@@ -2,6 +2,8 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-bottom: 1px solid #ccc; /* Dodaj obwódkę dookoła strony */
+  padding-bottom: 11%;
 }
 
 .container {
@@ -110,7 +112,7 @@ nav a:hover {
 }
 
 .albumCoversContainer {
-  bottom: 1%;
+  bottom: 2%;
   margin-left: -10%;
   overflow: hidden;
   position: fixed;

@@ -43,6 +43,10 @@ h1 {
 .h1Content {
   padding-top: 2%;
   padding-bottom: 5%;
+  color:#0a639e;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  letter-spacing: 1px;
+  font-size: 1.25em;
 }
 
 .nav {

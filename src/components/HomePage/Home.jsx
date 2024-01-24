@@ -158,7 +158,7 @@ const HomePage = ({ user }) => {
 
               {user && (
                 <div>
-                  <h1>Witaj {user.name},</h1>
+                  <h1>Cześć {user.name},</h1>
                   <SongUploadForm
                     onUploadComplete={handleUploadComplete}
                     uploadedSong={uploadedSong}

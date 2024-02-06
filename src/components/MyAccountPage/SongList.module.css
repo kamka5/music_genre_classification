@@ -1,0 +1,49 @@
+/* SongList.module.css */
+.selectContainer {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.customSelect {
+  appearance: none;
+  padding: 8px 55px 8px 15px; /* Zwiększono odstęp dla strzałki */
+  font-size: 16px;
+  margin-left: 1%;
+  border: 1px solid #a4a4a4;
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.customSelect:hover,
+.customSelect:focus {
+  border-color: #007bff;
+}
+
+/* Styl dla opcji w select */
+.customOption {
+  font-size: 16px;
+}
+
+/* SongList.module.css */
+.songList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.songItem {
+  padding: 8px;
+  margin: 4px 0;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+}
+
+.songItem:hover {
+  background-color: #dcdcdc;
+}

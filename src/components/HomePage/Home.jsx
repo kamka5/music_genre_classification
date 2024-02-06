@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
 import styles from "./Home.module.css"; // Zaimportuj plik ze stylami
-import NotificationComponent from "../NotificationComponent/Notification";
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -26,7 +25,6 @@ const HomePage = ({ user }) => {
   const [isTagFormVisible, setIsTagFormVisible] = useState(false);
   const [isUploadSuccessMessageVisible, setIsUploadSuccessMessageVisible] =
     useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
   const navigate = useNavigate(); // Dodaj useNavigate
 
   const handleUploadComplete = (song) => {
@@ -68,10 +66,6 @@ const HomePage = ({ user }) => {
 
     // Przejdź na nową stronę po zapisaniu zmian
     navigate("/tagged-song-info", { state: { editedTags } });
-  };
-
-  const closeNotification = () => {
-    setNotificationMessage("");
   };
 
   const cancelChanges = () => {
@@ -143,7 +137,7 @@ const HomePage = ({ user }) => {
               </h1>
 
               {!user && (
-                <div>
+                <div className={styles.centeredContent}>
                   <p>
                     Oznaczaj bez konieczności logowania. By zyskać dostęp do
                     historii przesłanych utworów i ich statystyki gatunków
@@ -175,15 +169,15 @@ const HomePage = ({ user }) => {
             <section className={styles.mainContent}>
               <div>
                 {isUploadSuccessMessageVisible && (
-                  <Link
-                    to="/tagged-song-info"
-                    className={styles.successMessage}
-                  >
-                    Utwór o nazwie {uploadedSong.title}.mp3 został prawidłowo
-                    przesłany.
-                  </Link>
+                  <div className={styles.successMessage}>
+                    Utwór o nazwie{" "}
+                    <span className={styles.songTitle}>
+                      {uploadedSong.title}.mp3
+                    </span>{" "}
+                    został prawidłowo przesłany.
+                  </div>
                 )}
-                <h3>Edytuj Tagi:</h3>
+                <h3 className={styles.editTagH3}>Edytuj Tagi:</h3>
                 <label>
                   Tytuł:
                   <input
@@ -230,17 +224,6 @@ const HomePage = ({ user }) => {
                 </Button>
               </div>
             </section>
-          </Col>
-        </Row>
-      )}
-      {/* Dodaj komponent powiadomień */}
-      {notificationMessage && (
-        <Row>
-          <Col>
-            <NotificationComponent
-              message={notificationMessage}
-              onClose={closeNotification}
-            />
           </Col>
         </Row>
       )}

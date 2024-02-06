@@ -1,38 +1,78 @@
 // SongList.jsx
 import React, { useState } from "react";
+import styles from "./SongList.module.css";
 
 const SongList = ({ songs, onSongClick }) => {
-  const [selectedGenre, setSelectedGenre] = useState("all");
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [displayedSongs, setDisplayedSongs] = useState(9);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const uniqueGenres = [...new Set(songs.map((song) => song.genre))];
-  const filteredSongs =
-    selectedGenre === "all"
+  const filteredSongsByGenre =
+    selectedGenre === ""
       ? songs
       : songs.filter((song) => song.genre === selectedGenre);
 
+  const filteredSongsBySearch = searchTerm
+    ? filteredSongsByGenre.filter((song) =>
+        song.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : filteredSongsByGenre;
+
+  const handleShowMore = () => {
+    const newDisplayedSongs = Math.min(
+      displayedSongs + 10,
+      filteredSongsBySearch.length
+    );
+    setDisplayedSongs(newDisplayedSongs);
+  };
+
   return (
     <div>
-      <label>
-        Filtruj według gatunku:
-        <select
-          value={selectedGenre}
-          onChange={(e) => setSelectedGenre(e.target.value)}
-        >
-          <option value="all">Wszystkie</option>
-          {uniqueGenres.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
+      <div className={styles.selectContainer}>
+        <label>
+          Filtruj według gatunku:
+          <select
+            className={styles.customSelect}
+            value={selectedGenre}
+            onChange={(e) => setSelectedGenre(e.target.value)}
+          >
+            <option value="" className={styles.customOption}>
+              Wszystkie
             </option>
-          ))}
-        </select>
-      </label>
-      <ul>
-        {filteredSongs.map((song, index) => (
-          <li key={index} onClick={() => onSongClick(song)}>
+            {uniqueGenres.map((genre) => (
+              <option key={genre} value={genre} className={styles.customOption}>
+                {genre}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <br />
+      <div className={styles.searchContainer}>
+        <label>
+          Wyszukaj po tytule:
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </label>
+      </div>
+      <ul className={styles.songList}>
+        {filteredSongsBySearch.slice(0, displayedSongs).map((song, index) => (
+          <li
+            key={index}
+            className={styles.songItem}
+            onClick={() => onSongClick(song)}
+          >
             <b>{song.title}</b> - {song.genre}
           </li>
         ))}
       </ul>
+      {filteredSongsBySearch.length > displayedSongs && (
+        <button onClick={handleShowMore}>Pokaż więcej</button>
+      )}
     </div>
   );
 };

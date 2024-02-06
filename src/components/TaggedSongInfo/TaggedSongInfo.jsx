@@ -1,9 +1,18 @@
-// TaggedSongInfo.jsx
 import React from "react";
-import { Container, Row, Col, Button, ProgressBar } from "react-bootstrap";
-import { Doughnut } from "react-chartjs-2";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import {
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Tooltip,
+  Cell,
+  XAxis,
+  YAxis,
+  Legend as RechartsLegend,
+} from "recharts";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./TaggedSongInfo.module.css";
+import styles from "./TaggedSongInfo.module.css";
 
 const TaggedSongInfo = () => {
   const navigate = useNavigate();
@@ -11,50 +20,52 @@ const TaggedSongInfo = () => {
   const editedTags = location.state?.editedTags || {};
 
   const handleGoBack = () => {
-    navigate(-1); // -1 oznacza powrót do poprzedniej strony
+    navigate(-1);
   };
 
-  // Mockowe dane dla wykresu czasowego
-  const timeChartData = {
-    labels: ["0s", "3s", "6s", "9s", "12s", "15s"],
-    datasets: [
-      {
-        label: "Zmiana Gatunku w Czasie",
-        data: [editedTags.genre, "rock", "pop", "jazz", "blues", "rock"],
-        fill: false,
-        borderColor: "rgba(75,192,192,1)",
-        lineTension: 0.1,
-      },
-    ],
-  };
+  const genres = [
+    "Pop",
+    "Pop",
+    "Pop",
+    "Disco",
+    "Pop",
+    "Rock",
+    "Rock",
+    "Disco",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Metal",
+    "Metal",
+    "Pop",
+    "Rock",
+    "Metal",
+    "Disco",
+  ];
 
-  // Mockowe dane dla wykresu korelacji gatunków
-  const correlationChartData = {
-    labels: ["Blues", "Rock", "Pop", "Jazz"],
-    datasets: [
-      {
-        data: [30, 20, 25, 15],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50"],
-      },
-    ],
-  };
+  const timeChartData = genres.map((genre, index) => ({
+    time: `${index * 9}s`,
+    genre: genre,
+  }));
 
-  // Konfiguracja dla wykresu korelacji gatunków
-  const correlationChartOptions = {
-    legend: {
-      display: true,
-      position: "right", // Możesz dostosować pozycję legendy
-    },
-    maintainAspectRatio: false, // Ustawienie utrzymania proporcji
-    responsive: true, // Włączenie responsywności
-  };
+  const correlationChartData = [
+    { name: "Blues", value: 40, color: "#FF6384" },
+    { name: "Rock", value: 20, color: "#36A2EB" },
+    { name: "Pop", value: 25, color: "#FFCE56" },
+    { name: "Jazz", value: 15, color: "#4CAF50" },
+  ];
 
   return (
-    <Container>
+    <Container className={styles.container}>
       <Row>
         <Col>
-          <h2>Informacje o otagowanej piosence:</h2>
+          <h1 className={styles.songInfoTitle}>
+            Informacje o otagowanej piosence:
+          </h1>
+          <br />
           <p>
             <strong>Tytuł:</strong> {editedTags.title || "Brak informacji"}
           </p>
@@ -70,36 +81,69 @@ const TaggedSongInfo = () => {
           <p>
             <strong>Gatunek:</strong> {editedTags.genre || "Brak informacji"}
           </p>
+          <br />
           <Button variant="primary" onClick={handleGoBack}>
             Cofnij
           </Button>
         </Col>
       </Row>
+      <br />
       <Row>
         <Col>
           <h3>Wykres Zmian Gatunku w Czasie</h3>
-          <div style={{ maxWidth: "100%", margin: "0 auto" }}>
-            <ProgressBar>
-              {timeChartData.labels.map((label, index) => (
-                <ProgressBar
-                  key={index}
-                  variant="info"
-                  now={(index / (timeChartData.labels.length - 1)) * 100}
-                  label={label}
-                />
-              ))}
-            </ProgressBar>
+          <div className={styles.chartContainer}>
+            <LineChart
+              width={800}
+              height={400}
+              data={timeChartData}
+              margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
+            >
+              <XAxis dataKey="time" />
+              <YAxis
+                type="category"
+                dataKey="genre"
+                tickCount={4}
+                domain={genres}
+                ticks={genres}
+                tickFormatter={(value) => value}
+              />
+              <Tooltip />
+              <Line
+                type="step"
+                dataKey="genre"
+                stroke="#36A2EB" // Zmiana koloru na niebieski
+                fill="#36A2EB"
+                connectNulls={false}
+                name="Gatunek"
+              />
+            </LineChart>
           </div>
         </Col>
       </Row>
+      <br />
       <Row>
         <Col>
-          <h3>Wykres Korelacji Gatunków</h3>
-          <div style={{ maxWidth: "50%", margin: "0 auto" }}>
-            <Doughnut
-              data={correlationChartData}
-              options={correlationChartOptions}
-            />
+          <h3>Diagram Korelacji Gatunków</h3>
+          <div className={styles.chartContainer}>
+            <PieChart width={750} height={400}>
+              <Pie
+                dataKey="value"
+                data={correlationChartData}
+                outerRadius={170}
+                label
+              >
+                {correlationChartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <RechartsLegend
+                verticalAlign="top"
+                align="left"
+                layout="vertical"
+                iconType="circle"
+              />
+              <Tooltip />
+            </PieChart>
           </div>
         </Col>
       </Row>

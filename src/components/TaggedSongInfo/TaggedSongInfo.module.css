@@ -1,20 +1,71 @@
 /* TaggedSongInfo.module.css */
 
 .container {
-  margin-top: 20px;
+  margin: 20px;
 }
 
-h2 {
+.songInfoTitle {
+  color: #002ba1;
+  text-align: left;
+}
+
+h3 {
   color: #333;
-  margin-bottom: 20px;
-}
-
-strong {
-  color: #007bff;
+  text-align: center;
 }
 
 p {
-  margin-bottom: 10px;
+  font-size: 16px;
+  margin-bottom: 8px;
 }
 
-/* Add more styles as needed */
+strong {
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border: 1px solid #0056b3;
+}
+
+.progress-bar-info {
+  background-color: #007bff !important;
+  border: 1px solid #007bff;
+}
+
+.chartContainer {
+  max-width: 800px; /* Zwiększam maksymalną szerokość dla lepszego dopasowania wykresów */
+  margin: 40px auto;
+  text-align: left; /* Dodaję do lewej justyfikacji dla jednolitego wyglądu */
+}
+
+.chart-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: right;
+}
+
+.chart-legend li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.chart-legend span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    max-width: 100%;
+  }
+}

@@ -10,7 +10,6 @@ const MyAccountPage = ({ user }) => {
   const [uploadedSongs, setUploadedSongs] = useState([]);
   const [genreFrequencyData, setGenreFrequencyData] = useState({});
   const chartRef = useRef(null);
-  const [displayedSongs, setDisplayedSongs] = useState(15);
   const [isChangePasswordVisible, setChangePasswordVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -145,14 +144,6 @@ const MyAccountPage = ({ user }) => {
     navigate("/tagged-song-info", { state: { editedTags: song } });
   };
 
-  const handleShowMore = () => {
-    const newDisplayedSongs = Math.min(
-      displayedSongs + 15,
-      uploadedSongs.length
-    );
-    setDisplayedSongs(newDisplayedSongs);
-  };
-
   return (
     <div className={styles.container}>
       <Link to="/">Wróć do Strony Głównej</Link>
@@ -207,9 +198,11 @@ const MyAccountPage = ({ user }) => {
           </div>
           <div>
             <br />
+            <br />
             <h3>
-              Najczęściej występujące gatunki na podstawie historii utworów:
+              Najczęściej występujące gatunki na podstawie historii utworów
             </h3>
+            <br />
             <canvas id="myChart" ref={chartRef}></canvas>
             {genreFrequencyData &&
             genreFrequencyData.labels &&
@@ -219,17 +212,9 @@ const MyAccountPage = ({ user }) => {
           </div>
           <div>
             <br />
-            <h3>Historia przesłanych piosenek:</h3>
-            <SongList
-              songs={uploadedSongs.slice(0, displayedSongs)}
-              onSongClick={handleSongClick}
-            />
-            {uploadedSongs.length > displayedSongs && (
-              <button onClick={handleShowMore}>Pokaż więcej</button>
-            )}
-            {uploadedSongs.length <= displayedSongs && (
-              <p>Nie ma więcej utworów do wyświetlenia.</p>
-            )}
+            <br />
+            <h2>Historia przesłanych piosenek:</h2>
+            <SongList songs={uploadedSongs} onSongClick={handleSongClick} />
           </div>
         </div>
       ) : (

@@ -46,3 +46,9 @@
   color: #00325a;
   font-weight: bold;
 }
+
+@media (max-width: 500px) {
+  .customUploadButton {
+    margin-top: 25%; /* Dostosuj szerokość logo dla mniejszych ekranów */
+  }
+}

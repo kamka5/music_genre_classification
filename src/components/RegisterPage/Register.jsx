@@ -1,5 +1,3 @@
-// RegisterPage.js - strona rejestracji
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
@@ -45,6 +43,12 @@ const RegisterPage = ({ setUser }) => {
     return errors;
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleRegister();
+    }
+  };
+
   const handleRegister = () => {
     const formErrors = validateForm();
 
@@ -72,21 +76,25 @@ const RegisterPage = ({ setUser }) => {
         type="text"
         placeholder="Imię"
         onChange={(e) => setName(e.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <input
         type="text"
         placeholder="Nazwisko"
         onChange={(e) => setSurname(e.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <input
         type="text"
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <input
         type="password"
         placeholder="Hasło"
         onChange={(e) => setPassword(e.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <button onClick={handleRegister}>Zarejestruj się</button>
 

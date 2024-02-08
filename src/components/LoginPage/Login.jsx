@@ -1,5 +1,3 @@
-// LoginPage.js - strona logowania
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
@@ -24,6 +22,12 @@ const LoginPage = ({ setUser }) => {
     }
 
     return errors;
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
   };
 
   const handleLogin = () => {
@@ -53,11 +57,13 @@ const LoginPage = ({ setUser }) => {
         type="text"
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <input
         type="password"
         placeholder="Hasło"
         onChange={(e) => setPassword(e.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <button onClick={handleLogin}>Zaloguj się</button>
 

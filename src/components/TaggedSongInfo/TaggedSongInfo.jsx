@@ -21,28 +21,108 @@ const TaggedSongInfo = () => {
     return "#000000";
   };
 
-  const genres = [
+  const originalGenres = [
+    "Pop",
+    "Pop",
     "Pop",
     "Pop",
     "Pop",
     "Disco",
     "Pop",
     "Pop",
-    "Rock",
-    "Disco",
-    "Pop",
-    "Rock",
-    "Pop",
     "Pop",
     "Pop",
     "Rock",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Pop",
+    "Pop",
     "Metal",
-    "Metal",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Disco",
+    "Pop",
+    "Pop",
     "Pop",
     "Rock",
     "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
     "Disco",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Metal",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Pop",
+    "Rock",
+    "Pop",
   ];
+
+  const transformGenres = (originalGenres) => {
+    const transformedGenres = [];
+    let currentGenreGroup = [];
+
+    for (let i = 0; i < originalGenres.length; i++) {
+      currentGenreGroup.push(originalGenres[i]);
+
+      // Sprawdzamy, czy mamy już 3 gatunki w grupie
+      if (currentGenreGroup.length === 3 || i === originalGenres.length - 1) {
+        // Grupujemy gatunki
+        const uniqueGenres = Array.from(new Set(currentGenreGroup));
+        let combinedGenre;
+
+        // Tworzymy jedną nazwę gatunku, jeśli mamy powtórzenia, w przeciwnym razie bierzemy środkowy/losowy
+        if (uniqueGenres.length === 1) {
+          combinedGenre = uniqueGenres[0];
+        } else {
+          combinedGenre = uniqueGenres[Math.floor(uniqueGenres.length / 2)];
+        }
+
+        // Dodajemy gatunek do nowej tablicy przekształconych gatunków
+        transformedGenres.push(combinedGenre);
+
+        // Resetujemy grupę gatunków
+        currentGenreGroup = [];
+      }
+    }
+
+    return transformedGenres;
+  };
+
+  const genres = transformGenres(originalGenres);
 
   const uniqueGenres = Array.from(new Set(genres));
 
@@ -167,7 +247,7 @@ const TaggedSongInfo = () => {
               options={optionsRangeBar}
               series={[{ data: timeChartData }]}
               type="rangeBar"
-              height={350}
+              height={400}
             />
           </div>
         </Col>

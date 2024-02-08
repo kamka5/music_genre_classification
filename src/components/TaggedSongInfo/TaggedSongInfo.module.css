@@ -7,10 +7,11 @@
 .songInfoTitle {
   color: #002ba1;
   text-align: left;
+  font-size: 2em;
 }
 
 h3 {
-  color: #333;
+  color: #383838;
   text-align: center;
 }
 
@@ -69,3 +70,32 @@ strong {
     max-width: 100%;
   }
 }
+
+.legendContainer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.legendItem {
+  display: inline-flex; /* Zmiana z inline na inline-flex */
+  align-items: center;
+  margin-right: 20px;
+}
+
+.legendColor {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.songInfo {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #001b64;
+  font-size: 0.95em;
+}
+
+/* TaggedSongInfo.module.css */
+
+

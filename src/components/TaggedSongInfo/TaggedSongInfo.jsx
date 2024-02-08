@@ -1,16 +1,6 @@
 import React from "react";
+import ReactApexChart from "react-apexcharts";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import {
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Tooltip,
-  Cell,
-  XAxis,
-  YAxis,
-  Legend as RechartsLegend,
-} from "recharts";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./TaggedSongInfo.module.css";
 
@@ -23,13 +13,21 @@ const TaggedSongInfo = () => {
     navigate(-1);
   };
 
+  const getColorByGenre = (genre) => {
+    if (genre === "Pop") return "#36A2EB";
+    if (genre === "Rock") return "#FFCE56";
+    if (genre === "Metal") return "#FF6384";
+    if (genre === "Disco") return "#4CAF50";
+    return "#000000";
+  };
+
   const genres = [
     "Pop",
     "Pop",
     "Pop",
     "Disco",
     "Pop",
-    "Rock",
+    "Pop",
     "Rock",
     "Disco",
     "Pop",
@@ -42,13 +40,17 @@ const TaggedSongInfo = () => {
     "Metal",
     "Pop",
     "Rock",
-    "Metal",
+    "Pop",
     "Disco",
   ];
 
+  const uniqueGenres = Array.from(new Set(genres));
+
   const timeChartData = genres.map((genre, index) => ({
-    time: `${index * 9}s`,
-    genre: genre,
+    x: `${index * 9}s`,
+    y: [0, 1],
+    fillColor: getColorByGenre(genre),
+    name: genre,
   }));
 
   const correlationChartData = [
@@ -58,14 +60,60 @@ const TaggedSongInfo = () => {
     { name: "Jazz", value: 15, color: "#4CAF50" },
   ];
 
+  const optionsRangeBar = {
+    chart: {
+      type: "rangeBar",
+      height: 400,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      },
+    },
+    xaxis: {
+      labels: {
+        show: false,
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "center",
+      offsetY: 10,
+    },
+    tooltip: {
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const genre = genres[dataPointIndex];
+        return `<div class="tooltip">${genre}</div>`;
+      },
+    },
+  };
+
+  const legendColors = uniqueGenres.map((genre) => getColorByGenre(genre));
+
+  // Tworzymy legendę "kolor-gatunek"
+  const legend = uniqueGenres.map((genre, index) => ({
+    name: genre,
+    fillColor: legendColors[index],
+  }));
+
+  const optionsPieChart = {
+    chart: {
+      type: "pie",
+      width: 750,
+      height: 400,
+    },
+    labels: correlationChartData.map((entry) => entry.name),
+  };
+
   return (
     <Container className={styles.container}>
       <Row>
         <Col>
           <h1 className={styles.songInfoTitle}>
-            Informacje o otagowanej piosence:
+            Informacje o otagowanej piosence
           </h1>
           <br />
+          <h2>Przypisano następujące tagi:</h2>
           <p>
             <strong>Tytuł:</strong> {editedTags.title || "Brak informacji"}
           </p>
@@ -88,62 +136,55 @@ const TaggedSongInfo = () => {
         </Col>
       </Row>
       <br />
+      <h3>Główny Rozpoznany Gatunek w Danym Segmencie</h3>
+      <br />
       <Row>
-        <Col>
-          <h3>Wykres Zmian Gatunku w Czasie</h3>
-          <div className={styles.chartContainer}>
-            <LineChart
-              width={800}
-              height={400}
-              data={timeChartData}
-              margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
-            >
-              <XAxis dataKey="time" />
-              <YAxis
-                type="category"
-                dataKey="genre"
-                tickCount={4}
-                domain={genres}
-                ticks={genres}
-                tickFormatter={(value) => value}
-              />
-              <Tooltip />
-              <Line
-                type="step"
-                dataKey="genre"
-                stroke="#36A2EB" // Zmiana koloru na niebieski
-                fill="#36A2EB"
-                connectNulls={false}
-                name="Gatunek"
-              />
-            </LineChart>
+        <Col md={12} className={styles.legendCol}>
+          {/* Legenda po prawej stronie */}
+          <div className={styles.legendContainer}>
+            {legend.map((item, index) => (
+              <div key={index} className={styles.legendItem}>
+                <span
+                  className={styles.legendColor}
+                  style={{ backgroundColor: item.fillColor }}
+                ></span>
+                {item.name}
+              </div>
+            ))}
           </div>
         </Col>
       </Row>
+      <Row className={styles.chartRow}>
+        <Col className={styles.chartCol}>
+          <div className={styles.chartContainer}>
+            <ReactApexChart
+              options={optionsRangeBar}
+              series={[{ data: timeChartData }]}
+              type="rangeBar"
+              height={350}
+            />
+          </div>
+        </Col>
+      </Row>
+
       <br />
       <Row>
         <Col>
-          <h3>Diagram Korelacji Gatunków</h3>
+          <h3>
+            Diagram Korelacji Gatunków w utworze{" "}
+            <span className={styles.songInfo}>
+              {editedTags.artist} - {editedTags.title}
+            </span>
+          </h3>
+
+          <br />
           <div className={styles.chartContainer}>
-            <PieChart width={750} height={400}>
-              <Pie
-                dataKey="value"
-                data={correlationChartData}
-                outerRadius={170}
-                label
-              >
-                {correlationChartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <RechartsLegend
-                verticalAlign="top"
-                align="left"
-                layout="vertical"
-                iconType="circle"
-              />
-              <Tooltip />
-            </PieChart>
+            <ReactApexChart
+              options={optionsPieChart}
+              series={correlationChartData.map((entry) => entry.value)}
+              type="pie"
+              height={400} // Ustawiono tylko wysokość
+            />
           </div>
         </Col>
       </Row>

@@ -95,9 +95,9 @@ nav a:hover {
 }
 
 .songTitle{
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  letter-spacing: 1px;
-  color: #001b51;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.98em;
+  color: #00153f;
 }
 
 /* Arkusz stylów (styles.css) */

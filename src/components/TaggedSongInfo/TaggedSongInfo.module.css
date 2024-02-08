@@ -1,7 +1,7 @@
 /* TaggedSongInfo.module.css */
 
 .container {
-  margin: 20px;
+  margin: 35px;
 }
 
 .songInfoTitle {
@@ -12,6 +12,7 @@
 
 h3 {
   color: #383838;
+  font-size: 1.3em;
   text-align: center;
 }
 

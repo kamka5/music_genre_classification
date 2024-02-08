@@ -96,14 +96,20 @@ const TaggedSongInfo = () => {
     fillColor: legendColors[index],
   }));
 
+  const sortedCorrelationChartData = correlationChartData.sort(
+    (a, b) => b.value - a.value
+  );
+
   const optionsPieChart = {
     chart: {
       type: "pie",
       width: 750,
       height: 400,
     },
-    labels: correlationChartData.map((entry) => entry.name),
+    labels: sortedCorrelationChartData.map((entry) => entry.name), // Zaktualizowano etykiety
   };
+
+  const seriesPieChart = sortedCorrelationChartData.map((entry) => entry.value);
 
   return (
     <Container className={styles.container}>
@@ -131,7 +137,7 @@ const TaggedSongInfo = () => {
           </p>
           <br />
           <Button variant="primary" onClick={handleGoBack}>
-            Cofnij
+            Powrót
           </Button>
         </Col>
       </Row>
@@ -181,9 +187,9 @@ const TaggedSongInfo = () => {
           <div className={styles.chartContainer}>
             <ReactApexChart
               options={optionsPieChart}
-              series={correlationChartData.map((entry) => entry.value)}
+              series={seriesPieChart}
               type="pie"
-              height={400} // Ustawiono tylko wysokość
+              height={400}
             />
           </div>
         </Col>

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
-import styles from "./Home.module.css"; // Zaimportuj plik ze stylami
+import LoadingSpinner from "./LoadingSpinner"; // Zaimportuj komponent LoadingSpinner
+import styles from "./Home.module.css";
+import axios from "axios";
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -12,7 +14,8 @@ const shuffleArray = (array) => {
   return array;
 };
 
-const HomePage = ({ user }) => {
+const HomePage = ({ onLogout }) => {
+  const [user, setUser] = useState(null);
   const [uploadedSong, setUploadedSong] = useState(null);
   const [editedTags, setEditedTags] = useState({
     title: "",
@@ -25,7 +28,28 @@ const HomePage = ({ user }) => {
   const [isTagFormVisible, setIsTagFormVisible] = useState(false);
   const [isUploadSuccessMessageVisible, setIsUploadSuccessMessageVisible] =
     useState(false);
-  const navigate = useNavigate(); // Dodaj useNavigate
+  const [isLoading, setIsLoading] = useState(true); // Dodaj stan dla ładowania
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("accessToken"); // Zastąp 'yourJwtTokenKeyName' nazwą klucza, pod którym przechowujesz token w localStorage
+        const response = await axios.get("http://localhost:3000/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Błąd podczas pobierania danych użytkownika", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []); // Pusty dependency array oznacza, że useEffect zostanie uruchomiony tylko raz po zamontowaniu komponentu
 
   const handleUploadComplete = (song) => {
     setUploadedSong(song);
@@ -74,6 +98,15 @@ const HomePage = ({ user }) => {
     setIsTagFormVisible(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    window.location.reload();
+  };
+
+  const handleMyAccount = () => {
+    navigate("/my-account");
+  };
+
   const indices = Array.from({ length: 70 }, (_, index) => index + 1);
 
   // Tasuj tablicę liczb
@@ -116,19 +149,29 @@ const HomePage = ({ user }) => {
 
               {user && (
                 <div>
-                  <Link to="/my-account" className={styles.myAccountLink}>
+                  <Button
+                    variant="link"
+                    className={styles.myAccountLink}
+                    onClick={handleMyAccount}
+                  >
                     Moje Konto
-                  </Link>
-                  <Link to="/logout" className={styles.logoutLink}>
+                  </Button>
+                  <Button
+                    variant="link"
+                    className={styles.logoutLink}
+                    onClick={handleLogout}
+                  >
                     Wyloguj
-                  </Link>
+                  </Button>
                 </div>
               )}
             </nav>
           </header>
         </Col>
       </Row>
-      {isUploadFormVisible && (
+      {isLoading && <LoadingSpinner />}{" "}
+      {/* Pokaż LoadingSpinner, gdy dane są ładowane */}
+      {!isLoading && isUploadFormVisible && (
         <Row>
           <Col>
             <section className={styles.mainContent}>
@@ -152,7 +195,7 @@ const HomePage = ({ user }) => {
 
               {user && (
                 <div>
-                  <h1>Cześć {user.name},</h1>
+                  <h1>Cześć {user.firstName},</h1>
                   <SongUploadForm
                     onUploadComplete={handleUploadComplete}
                     uploadedSong={uploadedSong}
@@ -163,7 +206,7 @@ const HomePage = ({ user }) => {
           </Col>
         </Row>
       )}
-      {isTagFormVisible && (
+      {!isLoading && isTagFormVisible && (
         <Row>
           <Col>
             <section className={styles.mainContent}>

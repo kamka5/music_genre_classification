@@ -14,86 +14,127 @@ const TaggedSongInfo = () => {
   };
 
   const getColorByGenre = (genre) => {
-    if (genre === "Pop") return "#36A2EB";
-    if (genre === "Rock") return "#FFCE56";
-    if (genre === "Metal") return "#FF6384";
-    if (genre === "Disco") return "#4CAF50";
-    return "#000000";
+    switch (genre) {
+      case "blues":
+        return "#1E90FF";
+      case "classical":
+        return "#FF1493";
+      case "country":
+        return "#8B4513";
+      case "disco":
+        return "#aCaFa0";
+      case "hip-hop":
+        return "#9966CC";
+      case "jazz":
+        return "#50FF55"; // Zmiana koloru dla jazz
+      case "metal":
+        return "#FF0804";
+      case "pop":
+        return "#36c2fB";
+      case "reggae":
+        return "#0000c0";
+      case "rock":
+        return "#FFA500"; // Zmiana koloru dla rock
+      default:
+        return "#000000";
+    }
   };
 
   const originalGenres = [
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Disco",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Metal",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Disco",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Disco",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Metal",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Pop",
-    "Rock",
-    "Pop",
+    "jazz",
+    "jazz",
+    "jazz",
+    "pop",
+    "pop",
+    "hiphop",
+    "pop",
+    "pop",
+    "reggae",
+    "hiphop",
+    "pop",
+    "jazz",
+    "pop",
+    "rock",
+    "pop",
+    "hiphop",
+    "pop",
+    "pop",
+    "pop",
+    "jazz",
+    "hiphop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "rock",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "jazz",
+    "disco",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "disco",
+    "rock",
+    "jazz",
+    "jazz",
+    "jazz",
+    "pop",
+    "jazz",
+    "jazz",
+    "pop",
+    "hiphop",
+    "hiphop",
+    "hiphop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "disco",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "disco",
+    "pop",
+    "pop",
+    "pop",
+    "pop",
+    "jazz",
+    "pop",
+    "pop",
+    "jazz",
+    "disco",
+    "pop",
+    "jazz",
+    "jazz",
+    "jazz",
+    "rock",
+    "pop",
+    "jazz",
+    "jazz",
+    "classical",
+    "classical",
   ];
 
   const transformGenres = (originalGenres) => {
     const transformedGenres = [];
     let currentGenreGroup = [];
+
+    // Zdefiniowanie funkcji poza pętlą
+    const findRepeatedGenre = (uniqueGenres, currentGenreGroup) => {
+      return uniqueGenres.find(
+        (genre) => currentGenreGroup.filter((g) => g === genre).length >= 2
+      );
+    };
 
     for (let i = 0; i < originalGenres.length; i++) {
       currentGenreGroup.push(originalGenres[i]);
@@ -104,11 +145,22 @@ const TaggedSongInfo = () => {
         const uniqueGenres = Array.from(new Set(currentGenreGroup));
         let combinedGenre;
 
-        // Tworzymy jedną nazwę gatunku, jeśli mamy powtórzenia, w przeciwnym razie bierzemy środkowy/losowy
+        // Tworzymy jedną nazwę gatunku, biorąc pod uwagę powtórzenia
         if (uniqueGenres.length === 1) {
           combinedGenre = uniqueGenres[0];
         } else {
-          combinedGenre = uniqueGenres[Math.floor(uniqueGenres.length / 2)];
+          // Użycie funkcji zdefiniowanej poza pętlą
+          const repeatedGenre = findRepeatedGenre(
+            uniqueGenres,
+            currentGenreGroup
+          );
+
+          if (repeatedGenre) {
+            combinedGenre = repeatedGenre;
+          } else {
+            // Jeśli brak powtórzeń, bierzemy środkowy/losowy
+            combinedGenre = uniqueGenres[Math.floor(uniqueGenres.length / 2)];
+          }
         }
 
         // Dodajemy gatunek do nowej tablicy przekształconych gatunków

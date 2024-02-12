@@ -102,26 +102,24 @@ nav a:hover {
 
 /* Arkusz stylów (styles.css) */
 
-.registerLink,
-.myAccountLink {
+.registerLink {
   display: inline-block;
   padding: 0.3em;
   border-radius: 0.3em;
   text-decoration: none;
 }
 
-.loginLink,
-.logoutLink{
+.loginLink{
   padding: 0.3em;
+}
+
+.logoutLink, .myAccountLink{
+  font-size: 1em;
+  width: 115px;
 }
 
 .registerLink {
   background-color: #3498db; /* Zielony kolor tła dla "Zarejestruj się" */
-  color: #fff; /* Biały kolor tekstu */
-}
-
-.myAccountLink {
-  background-color: #3498db; /* Niebieski kolor tła dla "Moje Konto" */
   color: #fff; /* Biały kolor tekstu */
 }
 
@@ -199,6 +197,10 @@ nav a:hover {
     padding: 0.3em;
     white-space: nowrap;
   }
+  .logoutLink, .myAccountLink{
+    font-size: 1em;
+    width: 100px;
+  }
   .container{
     max-width: 90%;
   }
@@ -228,6 +230,10 @@ nav a:hover {
   }
   .albumCover {
     width: 13%;
+  }
+  .logoutLink, .myAccountLink{
+    font-size: 1em;
+    width: 80px;
   }
   @keyframes scrollAlbums {
     0% {

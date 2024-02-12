@@ -1,126 +1,89 @@
-// MyAccountPage.jsx
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Chart } from "react-chartjs-2";
-import "chartjs-plugin-piechart-outlabels";
+import ReactApexChart from "react-apexcharts";
 import styles from "./MyAccount.module.css";
-import SongList from "./SongList"; // Nowy komponent
+import SongList from "./SongList";
+import axios from "axios";
 
-const MyAccountPage = ({ user }) => {
+const MyAccountPage = () => {
+  const [user, setUser] = useState(null);
   const [uploadedSongs, setUploadedSongs] = useState([]);
   const [genreFrequencyData, setGenreFrequencyData] = useState({});
-  const chartRef = useRef(null);
   const [isChangePasswordVisible, setChangePasswordVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [totalSongs, setTotalSongs] = useState(0); // Nowy stan do przechowywania liczby przesłanych piosenek
+  const [accountCreationDate, setAccountCreationDate] = useState("");
   const navigate = useNavigate();
-  const sampleUploadedSongs = useMemo(
-    () => [
-      { title: "Soulful Blues", genre: "blues" },
-      { title: "Classical Symphony No. 1", genre: "classical" },
-      { title: "Pop Sensation", genre: "pop" },
-      { title: "Urban Beats", genre: "hiphop" },
-      { title: "City Nights", genre: "hiphop" },
-      { title: "Smooth Jazz Vibes", genre: "jazz" },
-      { title: "Pop Anthem", genre: "pop" },
-      { title: "Eternal Love", genre: "pop" },
-      { title: "Reggae Groove", genre: "reggae" },
-      { title: "Rock Revolution", genre: "rock" },
-      { title: "Bluesy Afternoon", genre: "blues" },
-      { title: "Jazzy Exploration", genre: "jazz" },
-      { title: "Pop Extravaganza", genre: "pop" },
-      { title: "Disco Fever", genre: "disco" },
-      { title: "Hip Hop Flow", genre: "hiphop" },
-      { title: "Midnight Jazz Session", genre: "jazz" },
-      { title: "Metal Mayhem", genre: "metal" },
-      { title: "Pop Euphoria", genre: "pop" },
-      { title: "Reggae Serenity", genre: "reggae" },
-      { title: "Rock Fusion", genre: "rock" },
-      { title: "Bluesy Feelings", genre: "blues" },
-      { title: "Classical Serenade", genre: "classical" },
-      { title: "Country Roads", genre: "country" },
-      { title: "Disco Dancefloor", genre: "disco" },
-      { title: "Hip Hop Chronicles", genre: "hiphop" },
-      { title: "Jazz Odyssey", genre: "jazz" },
-      { title: "Pop Delight", genre: "pop" },
-      { title: "Pop Celebration", genre: "pop" },
-      { title: "Pop Harmony", genre: "pop" },
-      { title: "Rock Anthem", genre: "rock" },
-      { title: "Pop Song", genre: "pop" },
-      { title: "Pop Test", genre: "pop" },
-    ],
-    []
-  );
 
   useEffect(() => {
-    setUploadedSongs(sampleUploadedSongs);
+    const fetchUserData = async () => {
+      try {
+        // Pobieranie danych użytkownika
+        const userResponse = await axios.get("http://localhost:3000/users/me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
 
-    const genreFrequency = sampleUploadedSongs.reduce((acc, song) => {
-      acc[song.genre] = (acc[song.genre] || 0) + 1;
-      return acc;
-    }, {});
+        setUser(userResponse.data);
+        setAccountCreationDate(userResponse.data.createdAt);
+      } catch (error) {
+        console.error("Błąd podczas pobierania danych użytkownika", error);
+      }
+    };
 
-    const genreLabels = Object.keys(genreFrequency);
-    const genreDataValues = Object.values(genreFrequency);
+    const fetchUserSongs = async () => {
+      try {
+        // Pobieranie danych o przesłanych piosenkach
+        const songsResponse = await axios.get(
+          "http://localhost:3000/classification",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
 
-    setGenreFrequencyData({
-      labels: genreLabels,
-      datasets: [
-        {
+        const userSongs = songsResponse.data;
+
+        // Przetwarzanie piosenek na format używany w aplikacji
+        const formattedSongs = userSongs.map((song) => ({
+          title: song.fileName,
+          genre: song.genre,
+        }));
+
+        setTotalSongs(formattedSongs.length);
+        setUploadedSongs(formattedSongs);
+
+        const genreFrequency = formattedSongs.reduce((acc, song) => {
+          acc[song.genre] = (acc[song.genre] || 0) + 1;
+          return acc;
+        }, {});
+
+        // Sortowanie gatunków od najpopularniejszego do najrzadziej występującego
+        const sortedGenreFrequency = Object.entries(genreFrequency).sort(
+          (a, b) => b[1] - a[1]
+        );
+
+        const genreLabels = sortedGenreFrequency.map((entry) => entry[0]);
+        const genreDataValues = sortedGenreFrequency.map((entry) => entry[1]);
+        const colors = generateColors(genreLabels.length);
+
+        setGenreFrequencyData({
+          labels: genreLabels,
           data: genreDataValues,
-          backgroundColor: generateColors(genreLabels.length),
-          borderColor: "white",
-          borderWidth: 1,
-        },
-      ],
-    });
-  }, [sampleUploadedSongs]);
+          colors: colors,
+        });
+      } catch (error) {
+        console.error("Błąd podczas pobierania danych o piosenkach", error);
+      }
+    };
 
-  useEffect(() => {
-    const chartCanvas = chartRef.current;
-    const chartInstance = chartCanvas && chartCanvas.chart;
-
-    if (chartInstance) {
-      chartInstance.destroy();
-    }
-
-    if (
-      genreFrequencyData &&
-      genreFrequencyData.labels &&
-      genreFrequencyData.labels.length > 0
-    ) {
-      const newChartInstance = new Chart(chartCanvas, {
-        type: "pie",
-        data: genreFrequencyData,
-        options: {
-          plugins: {
-            pieceLabel: {
-              render: "percentage",
-              fontColor: "white",
-              precision: 2,
-            },
-          },
-          layout: {
-            padding: {
-              top: 75,
-              bottom: 50,
-            },
-          },
-          legend: {
-            display: false,
-          },
-          elements: {
-            arc: {
-              borderWidth: 0,
-            },
-          },
-        },
-      });
-
-      chartCanvas.chart = newChartInstance;
-    }
-  }, [genreFrequencyData]);
+    fetchUserData();
+    fetchUserSongs();
+  }, []);
 
   const generateColors = (count) => {
     const colors = [];
@@ -150,9 +113,15 @@ const MyAccountPage = ({ user }) => {
       <h2>Moje Konto</h2>
       {user ? (
         <div>
-          <p>Imię: {user.name}</p>
-          <p>Nazwisko: {user.surname}</p>
+          <p>Imię: {user.firstName}</p>
+          <p>Nazwisko: {user.lastName}</p>
           <p>Email: {user.email}</p>
+          <p>Liczba przesłanych piosenek: {totalSongs}</p>{" "}
+          {/* Nowa informacja o liczbie przesłanych piosenek */}
+          <p>
+            Konto założono: {new Date(accountCreationDate).toLocaleString()}
+          </p>{" "}
+          {/* Nowa informacja o dacie założenia konta */}
           <br />
           <div>
             {!isChangePasswordVisible && (
@@ -203,10 +172,21 @@ const MyAccountPage = ({ user }) => {
               Najczęściej występujące gatunki na podstawie historii utworów
             </h3>
             <br />
-            <canvas id="myChart" ref={chartRef}></canvas>
             {genreFrequencyData &&
             genreFrequencyData.labels &&
-            genreFrequencyData.labels.length > 0 ? null : (
+            genreFrequencyData.labels.length > 0 ? (
+              <ReactApexChart
+                options={{
+                  labels: genreFrequencyData.labels,
+                  colors: genreFrequencyData.colors,
+                }}
+                series={genreFrequencyData.data}
+                type="donut"
+                width="100%"
+                height="350"
+                style={{ maxWidth: "600px", margin: "auto" }}
+              />
+            ) : (
               <p>Brak danych do wygenerowania wykresu.</p>
             )}
           </div>
@@ -218,9 +198,12 @@ const MyAccountPage = ({ user }) => {
           </div>
         </div>
       ) : (
-        <p>
-          Nie jesteś zalogowany. <Link to="/login">Zaloguj się</Link>
-        </p>
+        <div className={styles.notLoggedInContainer}>
+          <p>Nie jesteś zalogowany.</p>
+          <Link to="/login">
+            <button className={styles.loginButton}>Zaloguj się</button>
+          </Link>
+        </div>
       )}
     </div>
   );

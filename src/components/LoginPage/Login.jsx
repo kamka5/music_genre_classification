@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import styles from "./Login.module.css";
 
 const LoginPage = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Sprawdź, czy użytkownik jest już zalogowany po załadowaniu komponentu
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      // Przenieś użytkownika do strony głównej
+      navigate("/");
+    }
+  }, [navigate]); // Pusta tablica zależności oznacza, że useEffect zostanie uruchomiony tylko raz po zamontowaniu komponentu
 
   const validateForm = () => {
     const errors = {};
@@ -30,21 +41,38 @@ const LoginPage = ({ setUser }) => {
     }
   };
 
-  const handleLogin = () => {
-    const formErrors = validateForm();
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
 
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
+      const formErrors = validateForm();
+
+      if (Object.keys(formErrors).length > 0) {
+        setErrors(formErrors);
+        return;
+      }
+
+      // Wysyłanie żądania do backendu
+      const response = await axios.post("http://localhost:3000/auth/signin", {
+        email,
+        password,
+      });
+
+      // Przetwarzanie odpowiedzi z backendu
+      const { access_token } = response.data;
+      localStorage.setItem("accessToken", access_token);
+
+      // Przenieś użytkownika do strony głównej po zalogowaniu
+      navigate("/");
+    } catch (error) {
+      console.error(
+        "Błąd logowania:",
+        (error.response && error.response.data) || error.message
+      );
+      // Dodaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
+    } finally {
+      setLoading(false);
     }
-
-    // Implementacja logiki logowania (zapytanie do backendu)
-    const mockUser = { name: "John", email: "john@example.com" };
-
-    setUser(mockUser);
-
-    // Przenieś użytkownika do strony głównej po zalogowaniu
-    navigate("/");
   };
 
   return (
@@ -65,7 +93,9 @@ const LoginPage = ({ setUser }) => {
         onChange={(e) => setPassword(e.target.value)}
         onKeyPress={handleKeyPress}
       />
-      <button onClick={handleLogin}>Zaloguj się</button>
+      <button onClick={handleLogin} disabled={loading}>
+        {loading ? "Trwa logowanie..." : "Zaloguj się"}
+      </button>
 
       {Object.keys(errors).length > 0 && (
         <div style={{ color: "red" }}>

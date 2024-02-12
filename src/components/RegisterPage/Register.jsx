@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"; // Dodano import Axiosa
 import styles from "./Register.module.css";
 
-const RegisterPage = ({ setUser }) => {
+const RegisterPage = () => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Dodano stan do obsługi ładowania
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -49,21 +51,37 @@ const RegisterPage = ({ setUser }) => {
     }
   };
 
-  const handleRegister = () => {
-    const formErrors = validateForm();
+  const handleRegister = async () => {
+    try {
+      setLoading(true);
 
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
+      const formErrors = validateForm();
+
+      if (Object.keys(formErrors).length > 0) {
+        setErrors(formErrors);
+        return;
+      }
+
+      // Wysyłanie żądania do backendu
+      const response = await axios.post("http://localhost:3000/auth/signup", {
+        firstName: name,
+        lastName: surname,
+        email,
+        password,
+      });
+
+      // Przetwarzanie odpowiedzi z backendu
+      const { access_token } = response.data;
+      localStorage.setItem("accessToken", access_token);
+
+      // Przenieś użytkownika do strony głównej po rejestracji
+      navigate("/");
+    } catch (error) {
+      console.error("Błąd rejestracji:", error);
+      // Dodaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
+    } finally {
+      setLoading(false);
     }
-
-    // Implementacja logiki rejestracji (zapytanie do backendu)
-    const mockUser = { name, surname, email };
-
-    setUser(mockUser);
-
-    // Przenieś użytkownika do strony głównej po rejestracji
-    navigate("/");
   };
 
   return (
@@ -96,7 +114,9 @@ const RegisterPage = ({ setUser }) => {
         onChange={(e) => setPassword(e.target.value)}
         onKeyPress={handleKeyPress}
       />
-      <button onClick={handleRegister}>Zarejestruj się</button>
+      <button onClick={handleRegister} disabled={loading}>
+        {loading ? "Trwa rejestracja..." : "Zarejestruj się"}
+      </button>
 
       {Object.keys(errors).length > 0 && (
         <div style={{ color: "red" }}>

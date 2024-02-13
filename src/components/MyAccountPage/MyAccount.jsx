@@ -47,7 +47,9 @@ const MyAccountPage = () => {
         );
 
         const userSongs = songsResponse.data;
+        console.log(songsResponse.data);
 
+        setUploadedSongs(userSongs);
         // Przetwarzanie piosenek na format używany w aplikacji
         const formattedSongs = userSongs.map((song) => ({
           title: song.fileName,
@@ -55,7 +57,6 @@ const MyAccountPage = () => {
         }));
 
         setTotalSongs(formattedSongs.length);
-        setUploadedSongs(formattedSongs);
 
         const genreFrequency = formattedSongs.reduce((acc, song) => {
           acc[song.genre] = (acc[song.genre] || 0) + 1;
@@ -104,7 +105,7 @@ const MyAccountPage = () => {
   };
 
   const handleSongClick = (song) => {
-    navigate("/tagged-song-info", { state: { editedTags: song } });
+    navigate("/tagged-song-info", { state: { songInfo: song } });
   };
 
   return (

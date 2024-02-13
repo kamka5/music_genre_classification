@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./Login.module.css";
+import { jwtDecode } from "jwt-decode";
 
 const LoginPage = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -11,13 +12,33 @@ const LoginPage = ({ setUser }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Sprawdź, czy użytkownik jest już zalogowany po załadowaniu komponentu
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      // Przenieś użytkownika do strony głównej
-      navigate("/");
-    }
-  }, [navigate]); // Pusta tablica zależności oznacza, że useEffect zostanie uruchomiony tylko raz po zamontowaniu komponentu
+    const checkTokenValidity = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+          return;
+        }
+
+        // Pobranie zdekodowanego tokenu
+        const decodedToken = jwtDecode(accessToken);
+
+        // Sprawdzenie ważności tokenu
+        if (decodedToken.exp * 1000 < Date.now()) {
+          // Token wygasł, usuwamy go i przekierowujemy użytkownika na stronę logowania
+          localStorage.removeItem("accessToken");
+          navigate("/login");
+        } else {
+          // Token jest ważny, przenieś użytkownika do strony głównej
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Błąd sprawdzania ważności tokena:", error);
+      }
+    };
+
+    checkTokenValidity();
+  }, [navigate]);
 
   const validateForm = () => {
     const errors = {};

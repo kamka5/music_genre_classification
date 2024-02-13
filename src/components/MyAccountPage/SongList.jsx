@@ -8,6 +8,7 @@ const SongList = ({ songs, onSongClick }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const uniqueGenres = [...new Set(songs.map((song) => song.genre))];
+
   const filteredSongsByGenre =
     selectedGenre === ""
       ? songs
@@ -15,7 +16,7 @@ const SongList = ({ songs, onSongClick }) => {
 
   const filteredSongsBySearch = searchTerm
     ? filteredSongsByGenre.filter((song) =>
-        song.title.toLowerCase().includes(searchTerm.toLowerCase())
+        song.fileName.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : filteredSongsByGenre;
 
@@ -66,7 +67,7 @@ const SongList = ({ songs, onSongClick }) => {
             className={styles.songItem}
             onClick={() => onSongClick(song)}
           >
-            <b>{song.title}</b> - {song.genre}
+            <b>{song.fileName}</b> - {song.genre} ({formatDate(song.createdAt)})
           </li>
         ))}
       </ul>
@@ -76,5 +77,19 @@ const SongList = ({ songs, onSongClick }) => {
     </div>
   );
 };
+
+// Dodana funkcja do formatowania daty
+function formatDate(dateString) {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
 
 export default SongList;

@@ -7,7 +7,7 @@ import styles from "./TaggedSongInfo.module.css";
 const TaggedSongInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const editedTags = location.state?.editedTags || {};
+  const songInfo = location.state?.songInfo || {};
 
   const handleGoBack = () => {
     navigate(-1);
@@ -16,114 +16,29 @@ const TaggedSongInfo = () => {
   const getColorByGenre = (genre) => {
     switch (genre) {
       case "blues":
-        return "#1E90FF";
+        return "#267990";
       case "classical":
-        return "#FF1493";
+        return "#d092a6";
       case "country":
-        return "#8B4513";
+        return "#e6194B";
       case "disco":
-        return "#aCaFa0";
-      case "hip-hop":
-        return "#9966CC";
+        return "#f55231";
+      case "hiphop":
+        return "#3cb44b";
       case "jazz":
-        return "#50FF55"; // Zmiana koloru dla jazz
+        return "#600000"; // Zmiana koloru dla jazz
       case "metal":
-        return "#FF0804";
+        return "#031";
       case "pop":
-        return "#36c2fB";
+        return "#301095";
       case "reggae":
-        return "#0000c0";
+        return "#efe119";
       case "rock":
-        return "#FFA500"; // Zmiana koloru dla rock
+        return "#911eb4"; // Zmiana koloru dla rock
       default:
         return "#000000";
     }
   };
-
-  const originalGenres = [
-    "jazz",
-    "jazz",
-    "jazz",
-    "pop",
-    "pop",
-    "hiphop",
-    "pop",
-    "pop",
-    "reggae",
-    "hiphop",
-    "pop",
-    "jazz",
-    "pop",
-    "rock",
-    "pop",
-    "hiphop",
-    "pop",
-    "pop",
-    "pop",
-    "jazz",
-    "hiphop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "rock",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "jazz",
-    "disco",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "disco",
-    "rock",
-    "jazz",
-    "jazz",
-    "jazz",
-    "pop",
-    "jazz",
-    "jazz",
-    "pop",
-    "hiphop",
-    "hiphop",
-    "hiphop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "disco",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "disco",
-    "pop",
-    "pop",
-    "pop",
-    "pop",
-    "jazz",
-    "pop",
-    "pop",
-    "jazz",
-    "disco",
-    "pop",
-    "jazz",
-    "jazz",
-    "jazz",
-    "rock",
-    "pop",
-    "jazz",
-    "jazz",
-    "classical",
-    "classical",
-  ];
 
   const transformGenres = (originalGenres) => {
     const transformedGenres = [];
@@ -174,7 +89,7 @@ const TaggedSongInfo = () => {
     return transformedGenres;
   };
 
-  const genres = transformGenres(originalGenres);
+  const genres = transformGenres(songInfo.genreSequence);
 
   const uniqueGenres = Array.from(new Set(genres));
 
@@ -185,12 +100,49 @@ const TaggedSongInfo = () => {
     name: genre,
   }));
 
-  const correlationChartData = [
-    { name: "Blues", value: 40, color: "#FF6384" },
-    { name: "Rock", value: 20, color: "#36A2EB" },
-    { name: "Pop", value: 25, color: "#FFCE56" },
-    { name: "Jazz", value: 15, color: "#4CAF50" },
-  ];
+  const transformGenreDistribution = (genreDistribution) => {
+    // Suma wszystkich wartości
+    const total = Object.values(genreDistribution).reduce(
+      (sum, value) => sum + value,
+      0
+    );
+
+    // Przekształć na tablicę obiektów z nazwami, wartościami procentowymi i kolorami
+    const distributionArray = Object.entries(genreDistribution).map(
+      ([genre, value]) => ({
+        name: genre,
+        value: (value / total) * 100,
+        color: getColorByGenre(genre),
+      })
+    );
+
+    // Ustaw kolor na podstawie palety kolorów
+    const colorPalette = [
+      "#301095",
+      "#600",
+      "#911eb4",
+      "#267990",
+      "#f55231",
+      "#031",
+      "#3cb44b",
+      "#efe119",
+      "#e6194B",
+      "#d092a6",
+    ];
+
+    distributionArray.forEach((genreData, index) => {
+      console.log(`Genre: ${genreData.name}, Color: ${genreData.color}`);
+      genreData.color = colorPalette[index % colorPalette.length];
+    });
+
+    return distributionArray;
+  };
+
+  console.log(transformGenreDistribution(songInfo.genreDistribution));
+
+  const correlationChartData = transformGenreDistribution(
+    songInfo.genreDistribution
+  );
 
   const optionsRangeBar = {
     chart: {
@@ -238,7 +190,8 @@ const TaggedSongInfo = () => {
       width: 750,
       height: 400,
     },
-    labels: sortedCorrelationChartData.map((entry) => entry.name), // Zaktualizowano etykiety
+    colors: sortedCorrelationChartData.map((entry) => entry.color),
+    labels: sortedCorrelationChartData.map((entry) => entry.name),
   };
 
   const seriesPieChart = sortedCorrelationChartData.map((entry) => entry.value);
@@ -253,19 +206,19 @@ const TaggedSongInfo = () => {
           <br />
           <h2>Przypisano następujące tagi:</h2>
           <p>
-            <strong>Tytuł:</strong> {editedTags.title || "Brak informacji"}
+            <strong>Tytuł:</strong> {songInfo.fileName || "Brak informacji"}
           </p>
           <p>
-            <strong>Wykonawca:</strong> {editedTags.artist || "Brak informacji"}
+            <strong>Wykonawca:</strong> {songInfo.artist || "Brak informacji"}
           </p>
           <p>
-            <strong>Album:</strong> {editedTags.album || "Brak informacji"}
+            <strong>Album:</strong> {songInfo.album || "Brak informacji"}
           </p>
           <p>
-            <strong>Rok wydania:</strong> {editedTags.year || "Brak informacji"}
+            <strong>Rok wydania:</strong> {songInfo.year || "Brak informacji"}
           </p>
           <p>
-            <strong>Gatunek:</strong> {editedTags.genre || "Brak informacji"}
+            <strong>Gatunek:</strong> {songInfo.genre || "Brak informacji"}
           </p>
           <br />
           <Button variant="primary" onClick={handleGoBack}>
@@ -274,7 +227,7 @@ const TaggedSongInfo = () => {
         </Col>
       </Row>
       <br />
-      <h3>Główny Rozpoznany Gatunek w Danym Segmencie</h3>
+      <h3>Przeważający gatunek w kolejnych segmentach dziewięciosekundowych</h3>
       <br />
       <Row>
         <Col md={12} className={styles.legendCol}>
@@ -310,19 +263,19 @@ const TaggedSongInfo = () => {
         <Col>
           <h3>
             Diagram Korelacji Gatunków w utworze{" "}
-            <span className={styles.songInfo}>
-              {editedTags.artist} - {editedTags.title}
-            </span>
-          </h3>
-
+            <span className={styles.songInfo}>"{songInfo.fileName}"</span> -
+            gatunek rozpoznawany co 3s
+          </h3>{" "}
           <br />
           <div className={styles.chartContainer}>
-            <ReactApexChart
-              options={optionsPieChart}
-              series={seriesPieChart}
-              type="pie"
-              height={400}
-            />
+            <div className={styles.chartContainer}>
+              <ReactApexChart
+                options={optionsPieChart}
+                series={seriesPieChart}
+                type="pie"
+                height={400}
+              />
+            </div>
           </div>
         </Col>
       </Row>

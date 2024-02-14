@@ -90,7 +90,13 @@ const LoginPage = ({ setUser }) => {
         "Błąd logowania:",
         (error.response && error.response.data) || error.message
       );
-      // Dodaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
+
+      // Obsługa błędów logowania
+      if (error.response && error.response.status === 401) {
+        setErrors({ general: "Nieprawidłowy email lub hasło." });
+      } else {
+        setErrors({ general: "Wystąpił błąd podczas logowania." });
+      }
     } finally {
       setLoading(false);
     }

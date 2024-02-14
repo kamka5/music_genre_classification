@@ -47,7 +47,6 @@ const MyAccountPage = () => {
         );
 
         const userSongs = songsResponse.data;
-        console.log(songsResponse.data);
 
         setUploadedSongs(userSongs);
         // Przetwarzanie piosenek na format używany w aplikacji

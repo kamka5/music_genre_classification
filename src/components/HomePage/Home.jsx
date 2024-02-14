@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
 import LoadingSpinner from "./LoadingSpinner"; // Zaimportuj komponent LoadingSpinner
+import LoadingSpinner2 from "../SongUploadForm/LoadingSpinner";
 import styles from "./Home.module.css";
 import axios from "axios";
+import Overlay from "./Overlay";
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -30,6 +32,8 @@ const HomePage = ({ onLogout }) => {
     useState(false);
   const [isLoading, setIsLoading] = useState(true); // Dodaj stan dla ładowania
   const navigate = useNavigate();
+  const [originalFilename, setOriginalFilename] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -51,14 +55,14 @@ const HomePage = ({ onLogout }) => {
     fetchUserData();
   }, []); // Pusty dependency array oznacza, że useEffect zostanie uruchomiony tylko raz po zamontowaniu komponentu
 
-  const handleUploadComplete = (song) => {
+  const handleUploadComplete = (song, title) => {
     setUploadedSong(song);
+    setOriginalFilename(title);
     setEditedTags({
-      title: song.title,
-      artist: song.artist,
-      album: song.album,
-      year: song.year,
-      genre: song.genre,
+      title: title,
+      artist: "Artysta",
+      album: "Album",
+      year: 2000,
     });
     setIsUploadFormVisible(false);
     setIsTagFormVisible(true);
@@ -72,24 +76,53 @@ const HomePage = ({ onLogout }) => {
     }));
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     if (!uploadedSong) {
       console.error("Nie wybrano pliku. Zapisywanie zmian niemożliwe.");
       return;
     }
 
-    // Tutaj można dodać logikę zapisywania tagów na serwerze
-    // ...
+    setIsUploading(true);
 
-    // Zresetuj stan uploadedSong
-    setUploadedSong(null);
+    // Przygotuj dane do przesłania na serwer
+    const formData = new FormData();
+    formData.append("file", uploadedSong);
+    const fileName = `${editedTags.artist} - ${editedTags.title}`;
+    formData.append("fileName", fileName);
+    formData.append("title", editedTags.title);
+    formData.append("artist", editedTags.artist);
+    formData.append("album", editedTags.album);
+    formData.append("year", editedTags.year);
+    //formData.append("genre", editedTags.genre);
 
-    // Przywróć widoczność formularza uploadu
-    setIsUploadFormVisible(true);
-    setIsTagFormVisible(false);
+    try {
+      const token = localStorage.getItem("accessToken");
+      // Wyślij żądanie POST na serwer
+      const response = await axios.post(
+        "http://localhost:3000/classification/",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodaj nagłówek z tokenem, jeśli potrzebny do uwierzytelnienia
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    // Przejdź na nową stronę po zapisaniu zmian
-    navigate("/tagged-song-info", { state: { editedTags } });
+      // Zresetuj stan uploadedSong
+      setUploadedSong(null);
+
+      // Przywróć widoczność formularza uploadu
+      setIsUploadFormVisible(true);
+      setIsTagFormVisible(false);
+
+      // Przejdź na nową stronę po zapisaniu zmian
+      navigate("/tagged-song-info", { state: { editedTags } });
+    } catch (error) {
+      console.error("Błąd podczas przesyłania piosenki na serwer:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const cancelChanges = () => {
@@ -169,6 +202,7 @@ const HomePage = ({ onLogout }) => {
           </header>
         </Col>
       </Row>
+      {isLoading && <Overlay />}
       {isLoading && <LoadingSpinner />}{" "}
       {/* Pokaż LoadingSpinner, gdy dane są ładowane */}
       {!isLoading && isUploadFormVisible && (
@@ -215,7 +249,7 @@ const HomePage = ({ onLogout }) => {
                   <div className={styles.successMessage}>
                     Utwór o nazwie{" "}
                     <span className={styles.songTitle}>
-                      {uploadedSong.title}.mp3
+                      {originalFilename}.mp3
                     </span>{" "}
                     został prawidłowo przesłany.
                   </div>
@@ -258,6 +292,10 @@ const HomePage = ({ onLogout }) => {
                   <br />
                   Zostanie on rozpoznany i dodany do tagów utworu automatycznie.
                 </p>
+                <br />
+                {isUploading && <Overlay />}
+                {isUploading && <LoadingSpinner2 />}{" "}
+                {/* Dodaj spinner w trakcie przesyłania */}
                 <br />
                 <Button variant="primary" onClick={saveChanges}>
                   Zapisz zmiany

@@ -1,12 +1,9 @@
-// SongUpload.jsx
 import React, { useState } from "react";
-import LoadingSpinner from "./LoadingSpinner"; // Zaimportuj LoadingSpinner
 import styles from "./SongUpload.module.css";
 
-const SongUpload = ({ onUploadComplete, uploadedSong }) => {
+const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState(null);
-  const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -14,7 +11,7 @@ const SongUpload = ({ onUploadComplete, uploadedSong }) => {
     setError(null);
   };
 
-  const uploadSong = async () => {
+  const uploadSong = () => {
     if (!selectedFile) {
       setError("Nie wybrano pliku.");
       return;
@@ -25,43 +22,15 @@ const SongUpload = ({ onUploadComplete, uploadedSong }) => {
       return;
     }
 
-    setUploading(true);
+    // Wywołaj funkcję przekazaną z props, aby przekazać informacje o piosence do komponentu nadrzędnego
+    onUploadComplete(selectedFile, selectedFile.name.replace(/\.[^/.]+$/, ""));
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("title", selectedFile.name.replace(/\.[^/.]+$/, ""));
-
-    try {
-      // Przesłanie pliku na serwer
-      const response = await fetch("http://localhost:3000/classification/", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Wystąpił błąd podczas przesyłania pliku.");
-      }
-
-      const result = await response.json();
-      onUploadComplete(result);
-    } catch (error) {
-      console.error("Błąd podczas przesyłania pliku:", error);
-      setError("Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.");
-    } finally {
-      setUploading(false);
-    }
+    // Opcjonalnie: Zresetuj stan komponentu, aby umożliwić ponowne przesyłanie plików
+    setSelectedFile(null);
   };
 
   return (
     <div className={styles.container}>
-      {uploading && (
-        <div className={styles.overlay}>
-          <LoadingSpinner />
-        </div>
-      )}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {uploadedSong ? (
         <p className={styles.successMessage}>
@@ -82,15 +51,9 @@ const SongUpload = ({ onUploadComplete, uploadedSong }) => {
             onChange={handleFileChange}
           />
           {selectedFile && (
-            <div className={styles.uploadControls}>
-              <button
-                onClick={uploadSong}
-                className={styles.uploadButton}
-                disabled={uploading}
-              >
-                Prześlij piosenkę
-              </button>
-            </div>
+            <button onClick={uploadSong} className={styles.uploadButton}>
+              Prześlij piosenkę
+            </button>
           )}
         </div>
       )}
@@ -98,4 +61,4 @@ const SongUpload = ({ onUploadComplete, uploadedSong }) => {
   );
 };
 
-export default SongUpload;
+export default SongUploadForm;

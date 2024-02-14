@@ -98,16 +98,12 @@ const HomePage = ({ onLogout }) => {
     try {
       const token = localStorage.getItem("accessToken");
       // Wyślij żądanie POST na serwer
-      const response = await axios.post(
-        "http://localhost:3000/classification/",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Dodaj nagłówek z tokenem, jeśli potrzebny do uwierzytelnienia
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post("http://localhost:3000/classification/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Dodaj nagłówek z tokenem, jeśli potrzebny do uwierzytelnienia
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       // Zresetuj stan uploadedSong
       setUploadedSong(null);

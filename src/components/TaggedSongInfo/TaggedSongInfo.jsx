@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -7,7 +7,22 @@ import styles from "./TaggedSongInfo.module.css";
 const TaggedSongInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const songInfo = location.state?.songInfo || {};
+  //const songInfo = location.state?.songInfo || {};
+  const songInfo = useMemo(
+    () => location.state?.songInfo || {},
+    [location.state]
+  );
+
+  useEffect(() => {
+    if (!Object.keys(songInfo).length) {
+      console.log("Navigating back");
+      navigate("/");
+    }
+  }, [songInfo, navigate]);
+
+  if (!Object.keys(songInfo).length) {
+    return null;
+  }
 
   const handleGoBack = () => {
     navigate(-1);
@@ -262,9 +277,9 @@ const TaggedSongInfo = () => {
       <Row>
         <Col>
           <h3>
-            Diagram Korelacji Gatunków w utworze{" "}
+            Diagram Rozkładu Gatunków w utworze{" "}
             <span className={styles.songInfo}>"{songInfo.fileName}"</span> -
-            gatunek rozpoznawany co 3s
+            gatunek rozpoznawany co 3s segment
           </h3>{" "}
           <br />
           <div className={styles.chartContainer}>

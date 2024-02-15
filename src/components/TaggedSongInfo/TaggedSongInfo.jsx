@@ -15,7 +15,6 @@ const TaggedSongInfo = () => {
 
   useEffect(() => {
     if (!Object.keys(songInfo).length) {
-      console.log("Navigating back");
       navigate("/");
     }
   }, [songInfo, navigate]);
@@ -146,14 +145,11 @@ const TaggedSongInfo = () => {
     ];
 
     distributionArray.forEach((genreData, index) => {
-      console.log(`Genre: ${genreData.name}, Color: ${genreData.color}`);
       genreData.color = colorPalette[index % colorPalette.length];
     });
 
     return distributionArray;
   };
-
-  console.log(transformGenreDistribution(songInfo.genreDistribution));
 
   const correlationChartData = transformGenreDistribution(
     songInfo.genreDistribution

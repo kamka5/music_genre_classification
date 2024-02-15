@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./SongUpload.module.css";
 
-const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
+const SongUploadForm = ({ onUploadComplete }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState(null);
 
@@ -11,7 +11,7 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
     setError(null);
   };
 
-  const uploadSong = () => {
+  const uploadSong = async () => {
     if (!selectedFile) {
       setError("Nie wybrano pliku.");
       return;
@@ -22,41 +22,57 @@ const SongUploadForm = ({ onUploadComplete, uploadedSong }) => {
       return;
     }
 
-    // Wywołaj funkcję przekazaną z props, aby przekazać informacje o piosence do komponentu nadrzędnego
-    onUploadComplete(selectedFile, selectedFile.name.replace(/\.[^/.]+$/, ""));
+    try {
+      const base64Data = await readFileAsBase64(selectedFile);
+      onUploadComplete({
+        uploadedSong: base64Data,
+        fileName: selectedFile.name.replace(/\.[^/.]+$/, ""),
+      });
+      setSelectedFile(null);
+    } catch (error) {
+      console.error("Błąd podczas wczytywania pliku:", error);
+      setError("Błąd podczas wczytywania pliku.");
+    }
+  };
 
-    // Opcjonalnie: Zresetuj stan komponentu, aby umożliwić ponowne przesyłanie plików
-    setSelectedFile(null);
+  const readFileAsBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result.split(",")[1]);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(file);
+    });
   };
 
   return (
     <div className={styles.container}>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {uploadedSong ? (
-        <p className={styles.successMessage}>
-          Plik {uploadedSong.title} został prawidłowo przesłany.
-        </p>
-      ) : (
-        <div className={styles.formContent}>
-          <label htmlFor="fileInput" className={styles.customUploadButton}>
-            {selectedFile
-              ? selectedFile.name
-              : "Wybierz plik mp3 do przesłania..."}
-          </label>
-          <input
-            type="file"
-            id="fileInput"
-            className={styles.fileInput}
-            accept=".mp3"
-            onChange={handleFileChange}
-          />
-          {selectedFile && (
-            <button onClick={uploadSong} className={styles.uploadButton}>
-              Prześlij piosenkę
-            </button>
-          )}
-        </div>
-      )}
+      <div className={styles.formContent}>
+        <label htmlFor="fileInput" className={styles.customUploadButton}>
+          {selectedFile
+            ? selectedFile.name
+            : "Wybierz plik mp3 do przesłania..."}
+        </label>
+        <input
+          type="file"
+          id="fileInput"
+          className={styles.fileInput}
+          accept=".mp3"
+          onChange={handleFileChange}
+        />
+        {selectedFile && (
+          <button onClick={uploadSong} className={styles.uploadButton}>
+            Prześlij piosenkę
+          </button>
+        )}
+      </div>
     </div>
   );
 };

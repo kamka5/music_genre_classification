@@ -55,11 +55,11 @@ const HomePage = ({ onLogout }) => {
     fetchUserData();
   }, []); // Pusty dependency array oznacza, że useEffect zostanie uruchomiony tylko raz po zamontowaniu komponentu
 
-  const handleUploadComplete = (song, title) => {
-    setUploadedSong(song);
-    setOriginalFilename(title);
+  const handleUploadComplete = ({ uploadedSong, fileName }) => {
+    setUploadedSong(uploadedSong);
+    setOriginalFilename(fileName);
     setEditedTags({
-      title: title,
+      title: fileName,
       artist: "Artysta",
       album: "Album",
       year: 2000,
@@ -85,23 +85,27 @@ const HomePage = ({ onLogout }) => {
     setIsUploading(true);
 
     // Przygotuj dane do przesłania na serwer
-    const formData = new FormData();
-    formData.append("file", uploadedSong);
-    const fileName = `${editedTags.artist} - ${editedTags.title}`;
-    formData.append("fileName", fileName);
-    formData.append("title", editedTags.title);
-    formData.append("artist", editedTags.artist);
-    formData.append("album", editedTags.album);
-    formData.append("year", editedTags.year);
-    //formData.append("genre", editedTags.genre);
+    const fileName = originalFilename;
+    const tags = {
+      title: editedTags.title,
+      artist: editedTags.artist,
+      album: editedTags.album,
+      year: editedTags.year.toString(),
+    };
+
+    const data = {
+      base64Data: uploadedSong,
+      fileName: fileName,
+      tags: tags,
+    };
 
     try {
       const token = localStorage.getItem("accessToken");
       // Wyślij żądanie POST na serwer
-      await axios.post("http://localhost:3000/classification/", formData, {
+      await axios.post("http://localhost:3000/classification/", data, {
         headers: {
-          Authorization: `Bearer ${token}`, // Dodaj nagłówek z tokenem, jeśli potrzebny do uwierzytelnienia
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
 

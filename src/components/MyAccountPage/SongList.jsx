@@ -32,7 +32,7 @@ const SongList = ({ songs, onSongClick }) => {
     <div>
       <div className={styles.selectContainer}>
         <label>
-          Filtruj według gatunku:
+          <span className={styles.filterSpan}>Filtruj według gatunku:</span>
           <select
             className={styles.customSelect}
             value={selectedGenre}
@@ -52,7 +52,7 @@ const SongList = ({ songs, onSongClick }) => {
       <br />
       <div className={styles.searchContainer}>
         <label>
-          Wyszukaj po tytule:
+          Wyszukaj po nazwie:
           <input
             type="text"
             value={searchTerm}
@@ -67,7 +67,10 @@ const SongList = ({ songs, onSongClick }) => {
             className={styles.songItem}
             onClick={() => onSongClick(song)}
           >
-            <b>{song.fileName}</b> - {song.genre} ({formatDate(song.createdAt)})
+            <b>
+              {song.tags.artist} - {song.tags.title}
+            </b>{" "}
+            - {song.genre} ({formatDate(song.createdAt)})
           </li>
         ))}
       </ul>

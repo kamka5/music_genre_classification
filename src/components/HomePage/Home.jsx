@@ -122,9 +122,6 @@ const HomePage = ({ onLogout }) => {
 
       const userSong = songsResponse.data;
 
-      // Przetwarzanie piosenek na format używany w aplikacji
-      console.log(userSong);
-
       // Przejdź na nową stronę po zapisaniu zmian
       navigate("/tagged-song-info", { state: { songInfo: userSong } });
     } catch (error) {

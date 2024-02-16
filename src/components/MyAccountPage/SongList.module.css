@@ -9,7 +9,8 @@
   padding: 8px 55px 8px 15px; /* Zwiększono odstęp dla strzałki */
   font-size: 16px;
   margin-left: 1%;
-  border: 1px solid #a4a4a4;
+  border: 1px solid #4d4d4d;
+  color: #4d4d4d;
   border-radius: 5px;
   background-color: #ffffff;
   cursor: pointer;
@@ -20,7 +21,9 @@
 
 .customSelect:hover,
 .customSelect:focus {
-  border-color: #007bff;
+  border-color: #000000;
+  border: 1.5px solid #4d4d4d;
+  border-radius: 8px;
 }
 
 /* Styl dla opcji w select */
@@ -46,4 +49,10 @@
 
 .songItem:hover {
   background-color: #dcdcdc;
+}
+
+.filterSpan {
+  color: #4d4d4d;
+  font-size: 115%;
+  font-weight: 500;
 }

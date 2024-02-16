@@ -3,7 +3,6 @@ import ReactApexChart from "react-apexcharts";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./TaggedSongInfo.module.css";
-import axios from "axios";
 
 const TaggedSongInfo = () => {
   const navigate = useNavigate();
@@ -32,26 +31,39 @@ const TaggedSongInfo = () => {
     if (songInfo && songInfo.url) {
       try {
         // Zakoduj nazwę pliku i zamień spacje na plusy
-        const fileName = encodeURIComponent(songInfo.url).replace(/%20/g, "+");
-        const downloadUrl = `http://localhost:3000/classification/download:${fileName}`;
+        const fileName = encodeURIComponent(songInfo.url);
+        const downloadUrl = `http://localhost:3000/classification/download/${fileName}`;
 
         // Pobierz token JWT z odpowiedniego miejsca
         const jwtToken = localStorage.getItem("accessToken");
+
+        if (!jwtToken) {
+          console.error("Brak tokena JWT");
+          return;
+        }
 
         // Dodaj token do nagłówków
         const headers = {
           Authorization: `Bearer ${jwtToken}`,
         };
 
-        // Użyj Axios do wysłania żądania GET z nagłówkami zawierającymi token JWT
-        const response = await axios.get(downloadUrl, { headers });
+        // Użyj Fetch do pobrania pliku
+        const response = await fetch(downloadUrl, { headers });
+
+        if (!response.ok) {
+          console.error(
+            `Błąd podczas pobierania pliku. Status: ${response.status}`
+          );
+          return;
+        }
 
         // Otwórz pobrany plik w nowym oknie przeglądarki
-        const blob = new Blob([response.data]);
+        const blob = await response.blob();
         const fileUrl = window.URL.createObjectURL(blob);
+
         const a = document.createElement("a");
         a.href = fileUrl;
-        a.download = "nazwa_pliku";
+        a.download = `${songInfo.tags.artist} - ${songInfo.tags.title}.mp3`; // Dodaj rozszerzenie pliku
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -212,8 +224,15 @@ const TaggedSongInfo = () => {
     },
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-        const genre = genres[dataPointIndex];
-        return `<div class="tooltip">${genre}</div>`;
+        const genre = genres[dataPointIndex].toUpperCase();
+        const totalSeconds = parseInt(timeChartData[dataPointIndex].x, 10);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+        const totalSecondsEnd = totalSeconds + 9;
+        const minutesEnd = Math.floor(totalSecondsEnd / 60);
+        const secondsEnd = (totalSecondsEnd % 60).toString().padStart(2, "0");
+
+        return `<div class="tooltip">${minutes}:${seconds}-${minutesEnd}:${secondsEnd} - ${genre}</div>`;
       },
     },
   };
@@ -281,7 +300,7 @@ const TaggedSongInfo = () => {
         </Col>
       </Row>
       <br />
-      <h3>Przeważający gatunek w kolejnych segmentach dziewięciosekundowych</h3>
+      <h3>Dominujący gatunek w kolejnych segmentach 9-sekundowych</h3>
       <br />
       <Row>
         <Col md={12} className={styles.legendCol}>

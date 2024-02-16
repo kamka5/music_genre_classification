@@ -105,42 +105,30 @@ const TaggedSongInfo = () => {
     const transformedGenres = [];
     let currentGenreGroup = [];
 
-    // Zdefiniowanie funkcji poza pętlą
-    const findRepeatedGenre = (uniqueGenres, currentGenreGroup) => {
-      return uniqueGenres.find(
-        (genre) => currentGenreGroup.filter((g) => g === genre).length >= 2
-      );
-    };
-
     for (let i = 0; i < originalGenres.length; i++) {
       currentGenreGroup.push(originalGenres[i]);
 
-      // Sprawdzamy, czy mamy już 3 gatunki w grupie
-      if (currentGenreGroup.length === 3 || i === originalGenres.length - 1) {
-        // Grupujemy gatunki
-        const uniqueGenres = Array.from(new Set(currentGenreGroup));
-        let combinedGenre;
+      // Sprawdzamy, czy mamy już 5 gatunków w grupie lub to ostatni element
+      if (currentGenreGroup.length === 5 || i === originalGenres.length - 1) {
+        if (currentGenreGroup.length === 5) {
+          const genreCountMap = currentGenreGroup.reduce((map, genre) => {
+            map.set(genre, (map.get(genre) || 0) + 1);
+            return map;
+          }, new Map());
 
-        // Tworzymy jedną nazwę gatunku, biorąc pod uwagę powtórzenia
-        if (uniqueGenres.length === 1) {
-          combinedGenre = uniqueGenres[0];
-        } else {
-          // Użycie funkcji zdefiniowanej poza pętlą
-          const repeatedGenre = findRepeatedGenre(
-            uniqueGenres,
-            currentGenreGroup
-          );
+          let mostFrequentGenre = currentGenreGroup[0];
+          let maxCount = genreCountMap.get(mostFrequentGenre) || 0;
 
-          if (repeatedGenre) {
-            combinedGenre = repeatedGenre;
-          } else {
-            // Jeśli brak powtórzeń, bierzemy środkowy/losowy
-            combinedGenre = uniqueGenres[Math.floor(uniqueGenres.length / 2)];
+          for (const [genre, count] of genreCountMap) {
+            if (count > maxCount) {
+              mostFrequentGenre = genre;
+              maxCount = count;
+            }
           }
-        }
 
-        // Dodajemy gatunek do nowej tablicy przekształconych gatunków
-        transformedGenres.push(combinedGenre);
+          // Dodajemy gatunek do nowej tablicy przekształconych gatunków
+          transformedGenres.push(mostFrequentGenre);
+        }
 
         // Resetujemy grupę gatunków
         currentGenreGroup = [];
@@ -150,12 +138,27 @@ const TaggedSongInfo = () => {
     return transformedGenres;
   };
 
+  // Przykład użycia
+  const originalGenres = [
+    "Rock",
+    "Pop",
+    "Rock",
+    "Jazz",
+    "Pop",
+    "Jazz",
+    "Rock",
+    "Rock",
+    "Pop",
+  ];
+  const result = transformGenres(originalGenres);
+  console.log(result); // Wyjście: ["Rock", "Pop"]
+
   const genres = transformGenres(songInfo.genreSequence);
 
   const uniqueGenres = Array.from(new Set(genres));
 
   const timeChartData = genres.map((genre, index) => ({
-    x: `${index * 9}s`,
+    x: `${index * 15}s`,
     y: [0, 1],
     fillColor: getColorByGenre(genre),
     name: genre,
@@ -228,7 +231,7 @@ const TaggedSongInfo = () => {
         const totalSeconds = parseInt(timeChartData[dataPointIndex].x, 10);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = (totalSeconds % 60).toString().padStart(2, "0");
-        const totalSecondsEnd = totalSeconds + 9;
+        const totalSecondsEnd = totalSeconds + 15;
         const minutesEnd = Math.floor(totalSecondsEnd / 60);
         const secondsEnd = (totalSecondsEnd % 60).toString().padStart(2, "0");
 
@@ -300,7 +303,7 @@ const TaggedSongInfo = () => {
         </Col>
       </Row>
       <br />
-      <h3>Dominujący gatunek w kolejnych segmentach 9-sekundowych</h3>
+      <h3>Dominujący gatunek w kolejnych 15-sekundowych segmentach</h3>
       <br />
       <Row>
         <Col md={12} className={styles.legendCol}>

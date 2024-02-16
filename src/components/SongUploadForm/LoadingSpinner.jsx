@@ -9,7 +9,7 @@ const LoadingSpinner = () => {
       <p className={styles.waitingPara}>
         {" "}
         Trwa przesyłanie i analizowanie pliku... <br />
-        Zajmie to do 10 sekund.
+        Zajmie to do kilkunastu sekund.
       </p>
     </div>
   );

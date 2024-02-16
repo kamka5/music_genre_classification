@@ -15,8 +15,10 @@ const SongList = ({ songs, onSongClick }) => {
       : songs.filter((song) => song.genre === selectedGenre);
 
   const filteredSongsBySearch = searchTerm
-    ? filteredSongsByGenre.filter((song) =>
-        song.fileName.toLowerCase().includes(searchTerm.toLowerCase())
+    ? filteredSongsByGenre.filter(
+        (song) =>
+          song.tags.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          song.tags.artist.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : filteredSongsByGenre;
 

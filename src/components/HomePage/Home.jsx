@@ -102,12 +102,16 @@ const HomePage = ({ onLogout }) => {
     try {
       const token = localStorage.getItem("accessToken");
       // Wyślij żądanie POST na serwer
-      await axios.post("http://localhost:3000/classification/", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const songsResponse = await axios.post(
+        "http://localhost:3000/classification/",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // Zresetuj stan uploadedSong
       setUploadedSong(null);
@@ -116,8 +120,13 @@ const HomePage = ({ onLogout }) => {
       setIsUploadFormVisible(true);
       setIsTagFormVisible(false);
 
+      const userSong = songsResponse.data;
+
+      // Przetwarzanie piosenek na format używany w aplikacji
+      console.log(userSong);
+
       // Przejdź na nową stronę po zapisaniu zmian
-      navigate("/tagged-song-info", { state: { editedTags } });
+      navigate("/tagged-song-info", { state: { songInfo: userSong } });
     } catch (error) {
       console.error("Błąd podczas przesyłania piosenki na serwer:", error);
     } finally {

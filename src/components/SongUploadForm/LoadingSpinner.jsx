@@ -8,7 +8,7 @@ const LoadingSpinner = () => {
       <div className={styles.spinner}></div>
       <p className={styles.waitingPara}>
         {" "}
-        Trwa przesyłanie pliku... <br />
+        Trwa przesyłanie i analizowanie pliku... <br />
         Zajmie to do 10 sekund.
       </p>
     </div>

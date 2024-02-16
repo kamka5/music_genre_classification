@@ -3,6 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./TaggedSongInfo.module.css";
+import axios from "axios";
 
 const TaggedSongInfo = () => {
   const navigate = useNavigate();
@@ -25,6 +26,40 @@ const TaggedSongInfo = () => {
 
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const handleDownload = async () => {
+    if (songInfo && songInfo.url) {
+      try {
+        // Zakoduj nazwę pliku i zamień spacje na plusy
+        const fileName = encodeURIComponent(songInfo.url).replace(/%20/g, "+");
+        const downloadUrl = `http://localhost:3000/classification/download:${fileName}`;
+
+        // Pobierz token JWT z odpowiedniego miejsca
+        const jwtToken = localStorage.getItem("accessToken");
+
+        // Dodaj token do nagłówków
+        const headers = {
+          Authorization: `Bearer ${jwtToken}`,
+        };
+
+        // Użyj Axios do wysłania żądania GET z nagłówkami zawierającymi token JWT
+        const response = await axios.get(downloadUrl, { headers });
+
+        // Otwórz pobrany plik w nowym oknie przeglądarki
+        const blob = new Blob([response.data]);
+        const fileUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = fileUrl;
+        a.download = "nazwa_pliku";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(fileUrl);
+      } catch (error) {
+        console.error("Błąd podczas pobierania pliku:", error);
+      }
+    }
   };
 
   const getColorByGenre = (genre) => {
@@ -217,21 +252,29 @@ const TaggedSongInfo = () => {
           <br />
           <h2>Przypisano następujące tagi:</h2>
           <p>
-            <strong>Tytuł:</strong> {songInfo.fileName || "Brak informacji"}
+            <strong>Tytuł:</strong> {songInfo.tags.title || "Brak informacji"}
           </p>
           <p>
-            <strong>Wykonawca:</strong> {songInfo.artist || "Brak informacji"}
+            <strong>Wykonawca:</strong>{" "}
+            {songInfo.tags.artist || "Brak informacji"}
           </p>
           <p>
-            <strong>Album:</strong> {songInfo.album || "Brak informacji"}
+            <strong>Album:</strong> {songInfo.tags.album || "Brak informacji"}
           </p>
           <p>
-            <strong>Rok wydania:</strong> {songInfo.year || "Brak informacji"}
+            <strong>Rok wydania:</strong>{" "}
+            {songInfo.tags.year || "Brak informacji"}
           </p>
           <p>
-            <strong>Gatunek:</strong> {songInfo.genre || "Brak informacji"}
+            <strong>Rozpoznany gatunek:</strong>{" "}
+            <strong>{songInfo.genre || "Brak informacji"}</strong>
           </p>
           <br />
+          {songInfo.url && (
+            <Button variant="success" onClick={handleDownload}>
+              Pobierz
+            </Button>
+          )}
           <Button variant="primary" onClick={handleGoBack}>
             Powrót
           </Button>

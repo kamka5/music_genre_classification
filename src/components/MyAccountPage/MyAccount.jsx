@@ -51,8 +51,11 @@ const MyAccountPage = () => {
         setUploadedSongs(userSongs);
         // Przetwarzanie piosenek na format używany w aplikacji
         const formattedSongs = userSongs.map((song) => ({
-          title: song.fileName,
+          title: song.tags.title,
           genre: song.genre,
+          year: song.tags.title,
+          album: song.tags.album,
+          artist: song.tags.artist,
         }));
 
         setTotalSongs(formattedSongs.length);
@@ -97,7 +100,8 @@ const MyAccountPage = () => {
   const handleChangePassword = async () => {
     try {
       console.log("Hasło zostało zmienione!");
-      navigate("/logout");
+      localStorage.removeItem("accessToken");
+      window.location.reload();
     } catch (error) {
       console.error("Błąd podczas zmiany hasła:", error.message);
     }

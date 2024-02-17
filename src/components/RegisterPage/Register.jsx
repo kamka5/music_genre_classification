@@ -9,7 +9,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false); // Dodano stan do obsługi ładowania
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -62,7 +62,6 @@ const RegisterPage = () => {
         return;
       }
 
-      // Wysyłanie żądania do backendu
       const response = await axios.post("http://localhost:3000/auth/signup", {
         firstName: name,
         lastName: surname,
@@ -70,15 +69,12 @@ const RegisterPage = () => {
         password,
       });
 
-      // Przetwarzanie odpowiedzi z backendu
       const { access_token } = response.data;
       localStorage.setItem("accessToken", access_token);
 
-      // Przenieś użytkownika do strony głównej po rejestracji
       navigate("/");
     } catch (error) {
       console.error("Błąd rejestracji:", error);
-      // Dodaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
     } finally {
       setLoading(false);
     }

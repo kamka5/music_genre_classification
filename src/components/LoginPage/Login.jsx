@@ -20,16 +20,12 @@ const LoginPage = ({ setUser }) => {
           return;
         }
 
-        // Pobranie zdekodowanego tokenu
         const decodedToken = jwtDecode(accessToken);
 
-        // Sprawdzenie ważności tokenu
         if (decodedToken.exp * 1000 < Date.now()) {
-          // Token wygasł, usuwamy go i przekierowujemy użytkownika na stronę logowania
           localStorage.removeItem("accessToken");
           navigate("/login");
         } else {
-          // Token jest ważny, przenieś użytkownika do strony głównej
           navigate("/");
         }
       } catch (error) {
@@ -73,17 +69,14 @@ const LoginPage = ({ setUser }) => {
         return;
       }
 
-      // Wysyłanie żądania do backendu
       const response = await axios.post("http://localhost:3000/auth/signin", {
         email,
         password,
       });
 
-      // Przetwarzanie odpowiedzi z backendu
       const { access_token } = response.data;
       localStorage.setItem("accessToken", access_token);
 
-      // Przenieś użytkownika do strony głównej po zalogowaniu
       navigate("/");
     } catch (error) {
       console.error(
@@ -91,7 +84,6 @@ const LoginPage = ({ setUser }) => {
         (error.response && error.response.data) || error.message
       );
 
-      // Obsługa błędów logowania
       if (error.response && error.response.status === 401) {
         setErrors({ general: "Nieprawidłowy email lub hasło." });
       } else {

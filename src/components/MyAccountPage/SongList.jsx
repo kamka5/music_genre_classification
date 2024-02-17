@@ -1,4 +1,3 @@
-// SongList.jsx
 import React, { useState } from "react";
 import styles from "./SongList.module.css";
 
@@ -83,7 +82,6 @@ const SongList = ({ songs, onSongClick }) => {
   );
 };
 
-// Dodana funkcja do formatowania daty
 function formatDate(dateString) {
   const options = {
     year: "numeric",

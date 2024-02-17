@@ -13,14 +13,13 @@ const MyAccountPage = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [totalSongs, setTotalSongs] = useState(0); // Nowy stan do przechowywania liczby przesłanych piosenek
+  const [totalSongs, setTotalSongs] = useState(0);
   const [accountCreationDate, setAccountCreationDate] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Pobieranie danych użytkownika
         const userResponse = await axios.get("http://localhost:3000/users/me", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -36,7 +35,6 @@ const MyAccountPage = () => {
 
     const fetchUserSongs = async () => {
       try {
-        // Pobieranie danych o przesłanych piosenkach
         const songsResponse = await axios.get(
           "http://localhost:3000/classification",
           {
@@ -49,7 +47,7 @@ const MyAccountPage = () => {
         const userSongs = songsResponse.data;
 
         setUploadedSongs(userSongs);
-        // Przetwarzanie piosenek na format używany w aplikacji
+
         const formattedSongs = userSongs.map((song) => ({
           title: song.tags.title,
           genre: song.genre,
@@ -65,7 +63,6 @@ const MyAccountPage = () => {
           return acc;
         }, {});
 
-        // Sortowanie gatunków od najpopularniejszego do najrzadziej występującego
         const sortedGenreFrequency = Object.entries(genreFrequency).sort(
           (a, b) => b[1] - a[1]
         );
@@ -121,11 +118,9 @@ const MyAccountPage = () => {
           <p>Nazwisko: {user.lastName}</p>
           <p>Email: {user.email}</p>
           <p>Liczba przesłanych piosenek: {totalSongs}</p>{" "}
-          {/* Nowa informacja o liczbie przesłanych piosenek */}
           <p>
             Konto założono: {new Date(accountCreationDate).toLocaleString()}
           </p>{" "}
-          {/* Nowa informacja o dacie założenia konta */}
           <br />
           <div>
             {!isChangePasswordVisible && (

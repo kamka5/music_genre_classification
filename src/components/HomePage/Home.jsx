@@ -16,7 +16,7 @@ const shuffleArray = (array) => {
   return array;
 };
 
-const HomePage = ({ onLogout }) => {
+const HomePage = () => {
   const [user, setUser] = useState(null);
   const [uploadedSong, setUploadedSong] = useState(null);
   const [editedTags, setEditedTags] = useState({
@@ -53,7 +53,7 @@ const HomePage = ({ onLogout }) => {
     };
 
     fetchUserData();
-  }, []); // Pusty dependency array oznacza, że useEffect zostanie uruchomiony tylko raz po zamontowaniu komponentu
+  }, []);
 
   const handleUploadComplete = ({ uploadedSong, fileName }) => {
     setUploadedSong(uploadedSong);
@@ -84,7 +84,6 @@ const HomePage = ({ onLogout }) => {
 
     setIsUploading(true);
 
-    // Przygotuj dane do przesłania na serwer
     const fileName = originalFilename;
     const tags = {
       title: editedTags.title,
@@ -101,7 +100,6 @@ const HomePage = ({ onLogout }) => {
 
     try {
       const token = localStorage.getItem("accessToken");
-      // Wyślij żądanie POST na serwer
       const songsResponse = await axios.post(
         "http://localhost:3000/classification/",
         data,
@@ -113,17 +111,16 @@ const HomePage = ({ onLogout }) => {
         }
       );
 
-      // Zresetuj stan uploadedSong
       setUploadedSong(null);
 
-      // Przywróć widoczność formularza uploadu
       setIsUploadFormVisible(true);
       setIsTagFormVisible(false);
 
       const userSong = songsResponse.data;
 
-      // Przejdź na nową stronę po zapisaniu zmian
-      navigate("/tagged-song-info", { state: { songInfo: userSong } });
+      navigate("/tagged-song-info", {
+        state: { songInfo: userSong, uploadedSong: uploadedSong },
+      });
     } catch (error) {
       console.error("Błąd podczas przesyłania piosenki na serwer:", error);
     } finally {
@@ -148,10 +145,8 @@ const HomePage = ({ onLogout }) => {
 
   const indices = Array.from({ length: 70 }, (_, index) => index + 1);
 
-  // Tasuj tablicę liczb
   const shuffledIndices = shuffleArray(indices);
 
-  // Utwórz tablicę okładek z użyciem tasowanych indeksów
   const albumCovers = shuffledIndices.map((index) =>
     require(`../../assets/coverImages/${index}.jpg`)
   );
@@ -210,7 +205,6 @@ const HomePage = ({ onLogout }) => {
       </Row>
       {isLoading && <Overlay />}
       {isLoading && <LoadingSpinner />}{" "}
-      {/* Pokaż LoadingSpinner, gdy dane są ładowane */}
       {!isLoading && isUploadFormVisible && (
         <Row>
           <Col>
@@ -300,9 +294,7 @@ const HomePage = ({ onLogout }) => {
                 </p>
                 <br />
                 {isUploading && <Overlay />}
-                {isUploading && <LoadingSpinner2 />}{" "}
-                {/* Dodaj spinner w trakcie przesyłania */}
-                <br />
+                {isUploading && <LoadingSpinner2 />} <br />
                 <Button variant="primary" onClick={saveChanges}>
                   Zapisz zmiany
                 </Button>

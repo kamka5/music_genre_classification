@@ -1,17 +1,39 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./TaggedSongInfo.module.css";
+import ReactAudioPlayer from "react-audio-player";
 
 const TaggedSongInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  //const songInfo = location.state?.songInfo || {};
   const songInfo = useMemo(
     () => location.state?.songInfo || {},
     [location.state]
   );
+  const [audioUrl, setAudioUrl] = useState(null);
+
+  useEffect(() => {
+    if (location.state && location.state.uploadedSong) {
+      const uploadedSong = location.state.uploadedSong;
+      const decodedAudioData = atob(uploadedSong);
+
+      const arrayBuffer = new ArrayBuffer(decodedAudioData.length);
+      const uint8Array = new Uint8Array(arrayBuffer);
+
+      for (let i = 0; i < decodedAudioData.length; i++) {
+        uint8Array[i] = decodedAudioData.charCodeAt(i);
+      }
+
+      const blob = new Blob([uint8Array], { type: "audio/mp3" });
+      const url = URL.createObjectURL(blob);
+
+      setAudioUrl(url);
+    } else {
+      setAudioUrl(null);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!Object.keys(songInfo).length) {
@@ -30,24 +52,18 @@ const TaggedSongInfo = () => {
   const handleDownload = async () => {
     if (songInfo && songInfo.url) {
       try {
-        // Zakoduj nazwę pliku i zamień spacje na plusy
         const fileName = encodeURIComponent(songInfo.url);
         const downloadUrl = `http://localhost:3000/classification/download/${fileName}`;
-
-        // Pobierz token JWT z odpowiedniego miejsca
         const jwtToken = localStorage.getItem("accessToken");
 
         if (!jwtToken) {
           console.error("Brak tokena JWT");
           return;
         }
-
-        // Dodaj token do nagłówków
         const headers = {
           Authorization: `Bearer ${jwtToken}`,
         };
 
-        // Użyj Fetch do pobrania pliku
         const response = await fetch(downloadUrl, { headers });
 
         if (!response.ok) {
@@ -57,13 +73,12 @@ const TaggedSongInfo = () => {
           return;
         }
 
-        // Otwórz pobrany plik w nowym oknie przeglądarki
         const blob = await response.blob();
         const fileUrl = window.URL.createObjectURL(blob);
 
         const a = document.createElement("a");
         a.href = fileUrl;
-        a.download = `${songInfo.tags.artist} - ${songInfo.tags.title}.mp3`; // Dodaj rozszerzenie pliku
+        a.download = `${songInfo.tags.artist} - ${songInfo.tags.title}.mp3`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -87,7 +102,7 @@ const TaggedSongInfo = () => {
       case "hiphop":
         return "#3cb44b";
       case "jazz":
-        return "#600000"; // Zmiana koloru dla jazz
+        return "#600000";
       case "metal":
         return "#031";
       case "pop":
@@ -95,7 +110,7 @@ const TaggedSongInfo = () => {
       case "reggae":
         return "#efe119";
       case "rock":
-        return "#911eb4"; // Zmiana koloru dla rock
+        return "#911eb4";
       default:
         return "#000000";
     }
@@ -108,7 +123,6 @@ const TaggedSongInfo = () => {
     for (let i = 0; i < originalGenres.length; i++) {
       currentGenreGroup.push(originalGenres[i]);
 
-      // Sprawdzamy, czy mamy już 5 gatunków w grupie lub to ostatni element
       if (currentGenreGroup.length === 5 || i === originalGenres.length - 1) {
         if (currentGenreGroup.length === 5) {
           const genreCountMap = currentGenreGroup.reduce((map, genre) => {
@@ -125,12 +139,8 @@ const TaggedSongInfo = () => {
               maxCount = count;
             }
           }
-
-          // Dodajemy gatunek do nowej tablicy przekształconych gatunków
           transformedGenres.push(mostFrequentGenre);
         }
-
-        // Resetujemy grupę gatunków
         currentGenreGroup = [];
       }
     }
@@ -138,23 +148,7 @@ const TaggedSongInfo = () => {
     return transformedGenres;
   };
 
-  // Przykład użycia
-  const originalGenres = [
-    "Rock",
-    "Pop",
-    "Rock",
-    "Jazz",
-    "Pop",
-    "Jazz",
-    "Rock",
-    "Rock",
-    "Pop",
-  ];
-  const result = transformGenres(originalGenres);
-  console.log(result); // Wyjście: ["Rock", "Pop"]
-
   const genres = transformGenres(songInfo.genreSequence);
-
   const uniqueGenres = Array.from(new Set(genres));
 
   const timeChartData = genres.map((genre, index) => ({
@@ -165,13 +159,11 @@ const TaggedSongInfo = () => {
   }));
 
   const transformGenreDistribution = (genreDistribution) => {
-    // Suma wszystkich wartości
     const total = Object.values(genreDistribution).reduce(
       (sum, value) => sum + value,
       0
     );
 
-    // Przekształć na tablicę obiektów z nazwami, wartościami procentowymi i kolorami
     const distributionArray = Object.entries(genreDistribution).map(
       ([genre, value]) => ({
         name: genre,
@@ -180,7 +172,6 @@ const TaggedSongInfo = () => {
       })
     );
 
-    // Ustaw kolor na podstawie palety kolorów
     const colorPalette = [
       "#301095",
       "#600",
@@ -242,7 +233,6 @@ const TaggedSongInfo = () => {
 
   const legendColors = uniqueGenres.map((genre) => getColorByGenre(genre));
 
-  // Tworzymy legendę "kolor-gatunek"
   const legend = uniqueGenres.map((genre, index) => ({
     name: genre,
     fillColor: legendColors[index],
@@ -263,6 +253,19 @@ const TaggedSongInfo = () => {
   };
 
   const seriesPieChart = sortedCorrelationChartData.map((entry) => entry.value);
+
+  function formatDate(dateString) {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    };
+
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  }
 
   return (
     <Container className={styles.container}>
@@ -291,23 +294,34 @@ const TaggedSongInfo = () => {
             <strong>Rozpoznany gatunek:</strong>{" "}
             <strong>{songInfo.genre || "Brak informacji"}</strong>
           </p>
+          <p>{formatDate(songInfo.createdAt)}</p>
           <br />
           {songInfo.url && (
-            <Button variant="success" onClick={handleDownload}>
+            <Button
+              variant="success"
+              className={styles.downloadBtn}
+              onClick={handleDownload}
+            >
               Pobierz
             </Button>
           )}
-          <Button variant="primary" onClick={handleGoBack}>
+          <Button
+            variant="primary"
+            className={styles.goBackBtn}
+            onClick={handleGoBack}
+          >
             Powrót
           </Button>
         </Col>
       </Row>
       <br />
-      <h3>Dominujący gatunek w kolejnych 15-sekundowych segmentach</h3>
       <br />
+      <br />
+      <h3>
+        Dominujący gatunek w 15-sekundowych segmentach podzielonego utworu
+      </h3>
       <Row>
         <Col md={12} className={styles.legendCol}>
-          {/* Legenda po prawej stronie */}
           <div className={styles.legendContainer}>
             {legend.map((item, index) => (
               <div key={index} className={styles.legendItem}>
@@ -333,16 +347,37 @@ const TaggedSongInfo = () => {
           </div>
         </Col>
       </Row>
-
+      {location.state.uploadedSong && (
+        <div>
+          {audioUrl && (
+            <ReactAudioPlayer
+              src={audioUrl}
+              autoPlay={false}
+              controls
+              style={{
+                width: "82.4%",
+                backgroundColor: "#727373",
+                border: "1px solid #ddd",
+                borderRadius: "50px",
+                padding: "0.3%",
+                marginLeft: "10.6%",
+                marginTop: "-5%",
+                marginBottom: "5%",
+              }}
+            />
+          )}
+        </div>
+      )}
       <br />
       <Row>
         <Col>
           <h3>
-            Diagram Rozkładu Gatunków w utworze{" "}
-            <span className={styles.songInfo}>"{songInfo.fileName}"</span> -
-            gatunek rozpoznawany co 3s segment
+            Dokładniejszy rozkład gatunków w utworze{" "}
+            <span className={styles.songInfo}>"{songInfo.fileName}"</span>
           </h3>{" "}
-          <br />
+          <h3 className={styles.songInfo}>
+            Gatunek określany kolejno w każdym 3-sekundowym segmencie.
+          </h3>
           <div className={styles.chartContainer}>
             <div className={styles.chartContainer}>
               <ReactApexChart

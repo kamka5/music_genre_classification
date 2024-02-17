@@ -9,9 +9,20 @@
 }
 
 .songInfoTitle {
-  color: #002ba1;
+  color: #174195;
   text-align: left;
   font-size: 2em;
+  margin-top: 4%;
+  margin-bottom: 1%;
+  padding-left: 7%;
+}
+
+.songInfoSubT{
+  padding-left: 10%;
+}
+
+.songInform{
+  padding-left: 11%;
 }
 
 h3 {
@@ -41,9 +52,10 @@ strong {
 }
 
 .downloadBtn, .goBackBtn{
-width: 13%;
+width: 95px;
 font-size: 90%;
 font-weight: bold;
+margin-right: 1%;
 }
 
 .progress-bar-info {

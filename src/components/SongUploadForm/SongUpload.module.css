@@ -71,6 +71,7 @@
 
 @media (max-width: 500px) {
   .customUploadButton {
-    margin-top: 25%;
+    margin-top: 12%;
+    font-size: 0.9em;
   }
 }

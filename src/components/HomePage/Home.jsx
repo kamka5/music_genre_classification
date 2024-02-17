@@ -229,7 +229,7 @@ const HomePage = () => {
 
               {user && (
                 <div>
-                  <h1>Cześć {user.firstName},</h1>
+                  <h1>Cześć {user.firstName}</h1>
                   <SongUploadForm
                     onUploadComplete={handleUploadComplete}
                     uploadedSong={uploadedSong}
@@ -295,12 +295,16 @@ const HomePage = () => {
                 <br />
                 {isUploading && <Overlay />}
                 {isUploading && <LoadingSpinner2 />} <br />
-                <Button variant="primary" onClick={saveChanges}>
-                  Zapisz zmiany
-                </Button>
-                <Button variant="secondary" onClick={cancelChanges}>
-                  Anuluj zmiany
-                </Button>
+                {!isUploading && (
+                  <div>
+                    <Button variant="primary" onClick={saveChanges}>
+                      Zapisz zmiany
+                    </Button>
+                    <Button variant="secondary" onClick={cancelChanges}>
+                      Anuluj zmiany
+                    </Button>
+                  </div>
+                )}
               </div>
             </section>
           </Col>

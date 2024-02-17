@@ -275,43 +275,47 @@ const TaggedSongInfo = () => {
             Informacje o otagowanej piosence
           </h1>
           <br />
-          <h2>Przypisano następujące tagi:</h2>
-          <p>
-            <strong>Tytuł:</strong> {songInfo.tags.title || "Brak informacji"}
-          </p>
-          <p>
-            <strong>Wykonawca:</strong>{" "}
-            {songInfo.tags.artist || "Brak informacji"}
-          </p>
-          <p>
-            <strong>Album:</strong> {songInfo.tags.album || "Brak informacji"}
-          </p>
-          <p>
-            <strong>Rok wydania:</strong>{" "}
-            {songInfo.tags.year || "Brak informacji"}
-          </p>
-          <p>
-            <strong>Rozpoznany gatunek:</strong>{" "}
-            <strong>{songInfo.genre || "Brak informacji"}</strong>
-          </p>
-          <p>{formatDate(songInfo.createdAt)}</p>
-          <br />
-          {songInfo.url && (
+          <h2 className={styles.songInfoSubT}>Przypisano następujące tagi:</h2>
+          <div className={styles.songInform}>
+            <p>
+              <strong>Tytuł:</strong> {songInfo.tags.title || "Brak informacji"}
+            </p>
+            <p>
+              <strong>Wykonawca:</strong>{" "}
+              {songInfo.tags.artist || "Brak informacji"}
+            </p>
+            <p>
+              <strong>Album:</strong> {songInfo.tags.album || "Brak informacji"}
+            </p>
+            <p>
+              <strong>Rok wydania:</strong>{" "}
+              {songInfo.tags.year || "Brak informacji"}
+            </p>
+            <p>
+              <strong>Rozpoznany głowny gatunek:</strong>{" "}
+              <strong style={{ textTransform: "uppercase" }}>
+                {songInfo.genre || "Brak informacji"}
+              </strong>
+            </p>
+            <p>{formatDate(songInfo.createdAt)}</p>
+            <br />
+            {songInfo.url && (
+              <Button
+                variant="success"
+                className={styles.downloadBtn}
+                onClick={handleDownload}
+              >
+                Pobierz
+              </Button>
+            )}
             <Button
-              variant="success"
-              className={styles.downloadBtn}
-              onClick={handleDownload}
+              variant="primary"
+              className={styles.goBackBtn}
+              onClick={handleGoBack}
             >
-              Pobierz
+              Powrót
             </Button>
-          )}
-          <Button
-            variant="primary"
-            className={styles.goBackBtn}
-            onClick={handleGoBack}
-          >
-            Powrót
-          </Button>
+          </div>
         </Col>
       </Row>
       <br />
@@ -376,7 +380,7 @@ const TaggedSongInfo = () => {
             <span className={styles.songInfo}>"{songInfo.fileName}"</span>
           </h3>{" "}
           <h3 className={styles.songInfo}>
-            Gatunek określany kolejno w każdym 3-sekundowym segmencie.
+            Gatunek określany kolejno w każdym 3-sekundowym segmencie
           </h3>
           <div className={styles.chartContainer}>
             <div className={styles.chartContainer}>
@@ -387,6 +391,23 @@ const TaggedSongInfo = () => {
                 height={400}
               />
             </div>
+          </div>
+          <div
+            style={{
+              marginBottom: "6%",
+              textAlign: "center",
+              marginTop: "1%",
+            }}
+          >
+            <p
+              style={{
+                fontSize: "0.86em",
+              }}
+            >
+              {" "}
+              Powyższy diagram przedstawia strukturę utworu, która bazuje na
+              fundamencie dziesięciu kluczowych gatunków muzycznych.
+            </p>
           </div>
         </Col>
       </Row>

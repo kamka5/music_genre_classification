@@ -3,17 +3,24 @@ body {
 }
 
 .container {
-  max-width: 88%;
-  margin: 0 auto;
+  max-width: 82%;
+  margin: 50px auto;
+  margin-top: 1%;
+  padding: 20px;
+  padding-bottom: 8%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5% 0.75%;
+  padding: 0.5% 0.75% 1.5% 0.75%;
   background-color: #ffffff;
-  border-bottom: 1px solid #001c50;
+  border-bottom: 1px solid #848484;
 }
 
 .logoContainer {
@@ -152,6 +159,17 @@ nav a:hover {
   margin-left: 1%;
 }
 
+@media (max-width: 1476px) {
+  .registerLink,
+  .loginLink,
+  .logoutLink,
+  .myAccountLink{
+    font-size: 1.1em;
+    padding: 0.3em;
+    white-space: nowrap;
+    margin: 2px 0;
+  }
+}
 
 @media (max-width: 1300px) {
   .logo {
@@ -168,6 +186,9 @@ nav a:hover {
   }
   .albumCover {
     width: 8.5%;
+  }
+  .pageTitle{
+    margin-right: 10px;
   }
   @keyframes scrollAlbums {
     0% {
@@ -188,7 +209,7 @@ nav a:hover {
   .logoutLink,
   .myAccountLink{
     font-size: 1.1em;
-    padding: 0.3em;
+    padding: 7px 0;
     white-space: nowrap;
   }
   .albumCover {
@@ -198,14 +219,15 @@ nav a:hover {
     font-size: 1em;
     width: 100px;
   }
-  .container{
-    max-width: 90%;
-  }
 }
 
 @media (max-width: 768px) {
   .logo {
     width: 15%;
+  }
+  .container{
+    max-width: 84%;
+    padding-bottom: 35%;
   }
   .mainContent{
     margin-top: 6%;
@@ -216,6 +238,13 @@ nav a:hover {
   .header{
     font-size: 0.65em;
   }
+  .h1Content{
+    font-size: 1.05em;
+  }
+  .logoutLink, .myAccountLink, .registerLink, .loginLink{
+    font-size: 1.15em;
+    width: 80px;
+  }
 }
 
 @media (max-width: 500px) {
@@ -223,13 +252,15 @@ nav a:hover {
     width: 19%;
   }
   .container{
-    max-width: 96%;
+    max-width: 84%;
+    padding-bottom: 46%;
   }
   .albumCover {
-    width: 13%;
+    width: 16%;
   }
-  .logoutLink, .myAccountLink{
-    font-size: 1em;
+
+  .logoutLink, .myAccountLink, .registerLink, .loginLink{
+    font-size: 1.2em;
     width: 80px;
   }
   @keyframes scrollAlbums {

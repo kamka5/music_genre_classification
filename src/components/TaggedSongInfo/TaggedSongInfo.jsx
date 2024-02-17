@@ -297,7 +297,7 @@ const TaggedSongInfo = () => {
                 {songInfo.genre || "Brak informacji"}
               </strong>
             </p>
-            <p>{formatDate(songInfo.createdAt)}</p>
+            <p>Przesłano {formatDate(songInfo.createdAt)}</p>
             <br />
             {songInfo.url && (
               <Button

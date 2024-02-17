@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
-import LoadingSpinner from "./LoadingSpinner"; // Zaimportuj komponent LoadingSpinner
+import LoadingSpinner from "./LoadingSpinner";
 import LoadingSpinner2 from "../SongUploadForm/LoadingSpinner";
 import styles from "./Home.module.css";
 import axios from "axios";
@@ -30,15 +30,16 @@ const HomePage = () => {
   const [isTagFormVisible, setIsTagFormVisible] = useState(false);
   const [isUploadSuccessMessageVisible, setIsUploadSuccessMessageVisible] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Dodaj stan dla ładowania
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [originalFilename, setOriginalFilename] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("accessToken"); // Zastąp 'yourJwtTokenKeyName' nazwą klucza, pod którym przechowujesz token w localStorage
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get("http://localhost:3000/users/me", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -46,9 +47,10 @@ const HomePage = () => {
         });
         setUser(response.data);
         setIsLoading(false);
+        setIsUserLoggedIn(true);
       } catch (error) {
-        console.error("Błąd podczas pobierania danych użytkownika", error);
         setIsLoading(false);
+        setIsUserLoggedIn(false);
       }
     };
 
@@ -216,13 +218,13 @@ const HomePage = () => {
               {!user && (
                 <div className={styles.centeredContent}>
                   <p>
-                    Oznaczaj bez konieczności logowania. By zyskać dostęp do
-                    historii przesłanych utworów i ich statystyki gatunków
-                    muzycznych, pokuś się o założenie konta.
+                    Zaloguj, się by móc ropoznać gatunek i oznaczać piosenki.
+                    Dodatkowo zyskasz dostęp do historii przesłanych utworów,
+                    statystyk na ich temat i nie tylko.
                   </p>
                   <SongUploadForm
                     onUploadComplete={handleUploadComplete}
-                    uploadedSong={uploadedSong}
+                    isUserLoggedIn={isUserLoggedIn}
                   />
                 </div>
               )}
@@ -232,7 +234,7 @@ const HomePage = () => {
                   <h1>Cześć {user.firstName}</h1>
                   <SongUploadForm
                     onUploadComplete={handleUploadComplete}
-                    uploadedSong={uploadedSong}
+                    isUserLoggedIn={isUserLoggedIn}
                   />
                 </div>
               )}

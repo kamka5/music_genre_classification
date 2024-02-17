@@ -9,10 +9,6 @@ const MyAccountPage = () => {
   const [user, setUser] = useState(null);
   const [uploadedSongs, setUploadedSongs] = useState([]);
   const [genreFrequencyData, setGenreFrequencyData] = useState({});
-  const [isChangePasswordVisible, setChangePasswordVisible] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [totalSongs, setTotalSongs] = useState(0);
   const [accountCreationDate, setAccountCreationDate] = useState("");
   const navigate = useNavigate();
@@ -94,16 +90,6 @@ const MyAccountPage = () => {
     return colors;
   };
 
-  const handleChangePassword = async () => {
-    try {
-      console.log("Hasło zostało zmienione!");
-      localStorage.removeItem("accessToken");
-      window.location.reload();
-    } catch (error) {
-      console.error("Błąd podczas zmiany hasła:", error.message);
-    }
-  };
-
   const handleSongClick = (song) => {
     navigate("/tagged-song-info", { state: { songInfo: song } });
   };
@@ -123,49 +109,6 @@ const MyAccountPage = () => {
           </p>{" "}
           <br />
           <div>
-            {!isChangePasswordVisible && (
-              <button
-                id="passwordChange"
-                onClick={() => setChangePasswordVisible(true)}
-              >
-                Zmiana hasła
-              </button>
-            )}
-            {isChangePasswordVisible && (
-              <div>
-                <label>
-                  Aktualne hasło:
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                  />
-                </label>
-                <label>
-                  Nowe hasło:
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-                </label>
-                <label>
-                  Potwierdź hasło:
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </label>
-                <button onClick={handleChangePassword}>Zmień hasło</button>
-                <button onClick={() => setChangePasswordVisible(false)}>
-                  Anuluj
-                </button>
-              </div>
-            )}
-          </div>
-          <div>
-            <br />
             <br />
             <h3>
               Najczęściej występujące gatunki na podstawie historii utworów

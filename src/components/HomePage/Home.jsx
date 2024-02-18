@@ -290,7 +290,12 @@ const HomePage = () => {
                   />
                 </label>
                 <p>
-                  <b>Gatunku nie musisz wprowadzać 😊</b>
+                  <b>
+                    Gatunku nie musisz wprowadzać{" "}
+                    <span role="img" aria-label=":)">
+                      😊
+                    </span>
+                  </b>
                   <br />
                   Zostanie on rozpoznany i dodany do tagów utworu automatycznie.
                 </p>

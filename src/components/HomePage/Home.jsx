@@ -145,7 +145,7 @@ const HomePage = () => {
     navigate("/my-account");
   };
 
-  const indices = Array.from({ length: 70 }, (_, index) => index + 1);
+  const indices = Array.from({ length: 100 }, (_, index) => index + 1);
 
   const shuffledIndices = shuffleArray(indices);
 

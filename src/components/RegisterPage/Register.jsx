@@ -39,7 +39,7 @@ const RegisterPage = () => {
       )
     ) {
       errors.password =
-        "Hasło powinno zawierać co najmniej jedną małą literę, jedną wielką literę, jedną cyfrę i jeden znak specjalny.";
+        "Hasło powinno zawierać co najmniej jedną małą literę, jedną wielką literę, cyfrę i znak specjalny.";
     }
 
     return errors;
@@ -110,12 +110,16 @@ const RegisterPage = () => {
         onChange={(e) => setPassword(e.target.value)}
         onKeyPress={handleKeyPress}
       />
-      <button onClick={handleRegister} disabled={loading}>
+      <button
+        onClick={handleRegister}
+        disabled={loading}
+        style={{ marginBottom: "5%" }}
+      >
         {loading ? "Trwa rejestracja..." : "Zarejestruj się"}
       </button>
 
       {Object.keys(errors).length > 0 && (
-        <div style={{ color: "red" }}>
+        <div style={{ color: "red", marginTop: "-6%", marginBottom: "6%" }}>
           {Object.values(errors).map((error, index) => (
             <p key={index}>{error}</p>
           ))}

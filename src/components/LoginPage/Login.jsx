@@ -112,12 +112,16 @@ const LoginPage = ({ setUser }) => {
         onChange={(e) => setPassword(e.target.value)}
         onKeyPress={handleKeyPress}
       />
-      <button onClick={handleLogin} disabled={loading}>
+      <button
+        onClick={handleLogin}
+        disabled={loading}
+        style={{ marginBottom: "5%" }}
+      >
         {loading ? "Trwa logowanie..." : "Zaloguj się"}
       </button>
 
       {Object.keys(errors).length > 0 && (
-        <div style={{ color: "red" }}>
+        <div style={{ color: "red", paddingBottom: "2%", marginTop: "-5%" }}>
           {Object.values(errors).map((error, index) => (
             <p key={index}>{error}</p>
           ))}

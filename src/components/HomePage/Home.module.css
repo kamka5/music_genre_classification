@@ -113,7 +113,7 @@ nav a:hover {
 }
 
 .loginLink{
-  padding: 0.3em;
+  padding: 0.3em 0.5em;
 }
 
 .logoutLink, .myAccountLink{
@@ -232,6 +232,9 @@ nav a:hover {
   .mainContent{
     margin-top: 6%;
   }
+  .albumCover {
+    width: 14%;
+  }
   h1{
     font-size: 1.16em;
   }
@@ -257,6 +260,10 @@ nav a:hover {
   }
   .albumCover {
     width: 16%;
+  }
+
+  .successMessage{
+    padding-top: 5%;
   }
 
   .logoutLink, .myAccountLink, .registerLink, .loginLink{

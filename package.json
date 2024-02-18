@@ -19,6 +19,7 @@
     "react-audio-player": "^0.17.0",
     "react-bootstrap": "^2.9.2",
     "react-chartjs-2": "^2.11.2",
+    "react-darkreader": "^1.5.6",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",

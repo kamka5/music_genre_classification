@@ -1,6 +1,8 @@
 .container {
   display: grid;
   justify-content: center;
+  padding-bottom: 7%;
+  padding-top: 1.5%;
 }
 
 .overlay {
@@ -27,18 +29,26 @@
 
 .customUploadButton {
   padding: 15px;
-  margin: 3.5% 5%;
+  margin: -5% 5% 3% 5%;
   background-color: #646464;
   color: #fff;
   border: none;
   cursor: pointer;
   display: inline-block;
   border-radius: 10px;
+  transition: background-color 0.3s, box-shadow 0.3s; /* Dodaj efekt przejścia */
+
+  /* Gradient tła dla efektu głębokości */
+  background-image: linear-gradient(to bottom, #646464, #525252);
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Dodaj cień */
 }
 
 .customUploadButton:hover {
-  background-color: #242424;
+  background-color: #525252; /* Zmiana koloru po najechaniu */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Zwiększenie cienia po najechaniu */
 }
+
 
 .uploadButton {
   padding: 10px;
@@ -62,6 +72,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.dropArea {
+  color: #555; /* Kolor tekstu */
+  font-size: 14px; /* Rozmiar tekstu */
+  display: block; /* Ustawienie na blok, aby zająć całą szerokość dostępnej przestrzeni */
+  cursor: pointer; /* Zmiana kursora na wskaźnik, aby sygnalizować, że można kliknąć */
+  margin-top: 2%;
+}
+
+.dropArea:hover {
+  text-decoration: underline; /* Podkreślenie tekstu po najechaniu myszką */
+}
+
+.container.dragging {
+  border: 2px dashed #3498db; /* Kolor obramowania podczas przeciągania */
+}
+
+.dropArea.dragging {
+  color: #3498db; /* Zmiana koloru tekstu podczas przeciągania */
+  font-weight: bold; /* Wytłuszczenie tekstu podczas przeciągania */
 }
 
 .progressBar {

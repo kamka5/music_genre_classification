@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const SongUploadForm = ({ onUploadComplete, isUserLoggedIn }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -11,6 +12,27 @@ const SongUploadForm = ({ onUploadComplete, isUserLoggedIn }) => {
     const file = e.target.files[0];
     setSelectedFile(file);
     setError(null);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+
+    const droppedFile = e.dataTransfer.files[0];
+
+    if (droppedFile) {
+      setSelectedFile(droppedFile);
+      setError(null);
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
   };
 
   const uploadSong = async () => {
@@ -54,7 +76,12 @@ const SongUploadForm = ({ onUploadComplete, isUserLoggedIn }) => {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${isDragging ? styles.dragging : ""}`}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+    >
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div className={styles.formContent}>
         <label
@@ -62,10 +89,12 @@ const SongUploadForm = ({ onUploadComplete, isUserLoggedIn }) => {
           className={styles.customUploadButton}
           onClick={() => !isUserLoggedIn && navigate("/login")}
         >
-          {selectedFile
-            ? selectedFile.name
-            : "Wybierz plik mp3 do przesłania..."}
+          {selectedFile ? selectedFile.name : "Wybierz plik mp3 do przesłania"}
         </label>
+        <br />
+        {!selectedFile && (
+          <span className={styles.dropArea}>albo go tutaj upuść</span>
+        )}
         <input
           type="file"
           id="fileInput"

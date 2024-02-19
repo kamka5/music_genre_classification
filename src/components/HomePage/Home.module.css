@@ -1,5 +1,6 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('../../assets/body_background.jpg');
 }
 
 .container {
@@ -7,10 +8,10 @@ body {
   margin: 50px auto;
   margin-top: 1%;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #d6d6d6;
   border-radius: 8px;
   background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -30,7 +31,7 @@ body {
 .logo {
   width: 7%;
   height: auto;
-  margin-right: 1%;
+  margin-right: 2%;
 }
 
 h1 {
@@ -40,18 +41,22 @@ h1 {
 }
 
 .pageTitle {
-  color: #001b50;
+  color: #000000;
   font-size: 2.3em;
 }
 
 .h1Content {
   padding-top: 2%;
   padding-bottom: 5%;
-  color:#0a639e;
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
-  letter-spacing: 1px;
-  font-size: 1.25em;
+  color: #0a639e;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  letter-spacing: 2px;
+  font-size: 1.22em;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
 }
+
 
 .nav {
   display: flex;
@@ -100,8 +105,8 @@ nav a:hover {
 
 .songTitle{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 0.95em;
-  color: #001d58;
+  font-size: 0.94em;
+  color: #001580;
 }
 
 .registerLink {
@@ -109,10 +114,13 @@ nav a:hover {
   padding: 0.3em;
   border-radius: 0.3em;
   text-decoration: none;
+  background-color: #3498db;
+  color: #fff;
 }
 
 .loginLink{
   padding: 0.3em 0.5em;
+  font-weight: 500;
 }
 
 .logoutLink, .myAccountLink{
@@ -120,14 +128,21 @@ nav a:hover {
   width: 115px;
 }
 
-.registerLink {
-  background-color: #3498db;
-  color: #fff;
-}
-
 .registerLink:hover,
 .myAccountLink:hover {
   background-color: #267fbb;
+}
+
+.registerLink:hover,
+.logoutLink:hover,
+.myAccountLink:hover {
+  background-color: #2980b9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Dodany efekt cienia podczas najechania */
+}
+
+.loginLink:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 }
 
 .albumCoversContainer {
@@ -143,7 +158,7 @@ nav a:hover {
 }
 
 .albumCover {
-  width: 5.5%;
+  width: 5.3%;
   flex: 0 0 auto;
   margin-right: 2%;
   margin-left: 1%;

@@ -249,11 +249,11 @@ const HomePage = () => {
               <div>
                 {isUploadSuccessMessageVisible && (
                   <div className={styles.successMessage}>
-                    Utwór o nazwie{" "}
+                    Plik o nazwie "{""}
                     <span className={styles.songTitle}>
                       {originalFilename}.mp3
-                    </span>{" "}
-                    został prawidłowo przesłany.
+                    </span>
+                    {""}" został prawidłowo przesłany.
                   </div>
                 )}
                 <h3 className={styles.editTagH3}>Edytuj Tagi:</h3>

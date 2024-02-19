@@ -89,11 +89,13 @@ const SongUploadForm = ({ onUploadComplete, isUserLoggedIn }) => {
           className={styles.customUploadButton}
           onClick={() => !isUserLoggedIn && navigate("/login")}
         >
-          {selectedFile ? selectedFile.name : "Wybierz plik mp3 do przesłania"}
+          {selectedFile
+            ? selectedFile.name
+            : "Wybierz plik mp3 do przesłania..."}
         </label>
         <br />
         {!selectedFile && (
-          <span className={styles.dropArea}>albo go tutaj upuść</span>
+          <span className={styles.dropArea}>bądź go upuść w tym miejscu.</span>
         )}
         <input
           type="file"

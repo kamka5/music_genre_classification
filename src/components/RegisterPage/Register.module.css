@@ -4,9 +4,10 @@
   width: 340px;
   margin: auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 5px;
   margin-top: 50px;
+  background-color: rgb(244, 244, 244);
 }
 
 input {

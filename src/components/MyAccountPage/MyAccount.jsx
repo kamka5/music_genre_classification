@@ -97,22 +97,49 @@ const MyAccountPage = () => {
   return (
     <div className={styles.container}>
       <Link to="/">Wróć do Strony Głównej</Link>
-      <h2>Moje Konto</h2>
+      <h2 style={{ marginTop: "4%" }}>Twoje dane</h2>
       {user ? (
         <div>
-          <p>Imię: {user.firstName}</p>
-          <p>Nazwisko: {user.lastName}</p>
-          <p>Email: {user.email}</p>
-          <p>Liczba przesłanych piosenek: {totalSongs}</p>{" "}
-          <p>
-            Konto założono: {new Date(accountCreationDate).toLocaleString()}
-          </p>{" "}
+          <div style={{ marginLeft: "1%", marginTop: "3%" }}>
+            <p>
+              <strong>Imię: </strong>
+              {user.firstName}
+            </p>
+            <p>
+              <strong>Nazwisko: </strong>
+              {user.lastName}
+            </p>
+            <p>
+              <strong>Email: </strong>
+              {user.email}
+            </p>
+            <p>
+              <strong>Liczba przesłanych piosenek: </strong>
+              {totalSongs}
+            </p>{" "}
+            <br />
+            <p>
+              Konto założono: {new Date(accountCreationDate).toLocaleString()}
+            </p>{" "}
+          </div>
           <br />
           <div>
             <br />
-            <h3>
+            <h2 style={{ textAlign: "center", marginBottom: "5%" }}>
               Najczęściej występujące gatunki na podstawie historii utworów
-            </h3>
+            </h2>
+            {genreFrequencyData.labels && (
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#333",
+                  marginTop: "-3%",
+                  marginBottom: "4%",
+                }}
+              >
+                Twój ulubiony gatunek: {genreFrequencyData.labels[0]}
+              </p>
+            )}
             <br />
             {genreFrequencyData &&
             genreFrequencyData.labels &&
@@ -135,7 +162,9 @@ const MyAccountPage = () => {
           <div>
             <br />
             <br />
-            <h2>Historia przesłanych piosenek:</h2>
+            <h2 style={{ marginTop: "4%", marginBottom: "5%" }}>
+              Historia przesłanych piosenek:
+            </h2>
             <SongList songs={uploadedSongs} onSongClick={handleSongClick} />
           </div>
         </div>

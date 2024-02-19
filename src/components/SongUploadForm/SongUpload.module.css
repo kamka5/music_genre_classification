@@ -36,17 +36,14 @@
   cursor: pointer;
   display: inline-block;
   border-radius: 10px;
-  transition: background-color 0.3s, box-shadow 0.3s; /* Dodaj efekt przejścia */
-
-  /* Gradient tła dla efektu głębokości */
+  transition: background-color 0.3s, box-shadow 0.3s;
   background-image: linear-gradient(to bottom, #646464, #525252);
-
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Dodaj cień */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .customUploadButton:hover {
-  background-color: #525252; /* Zmiana koloru po najechaniu */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Zwiększenie cienia po najechaniu */
+  background-color: #444444;
+  box-shadow: 0 8px 16px rgba(0, 0.2, 0, 0.27);
 }
 
 
@@ -75,24 +72,24 @@
 }
 
 .dropArea {
-  color: #555; /* Kolor tekstu */
-  font-size: 14px; /* Rozmiar tekstu */
-  display: block; /* Ustawienie na blok, aby zająć całą szerokość dostępnej przestrzeni */
-  cursor: pointer; /* Zmiana kursora na wskaźnik, aby sygnalizować, że można kliknąć */
+  color: #555;
+  font-size: 14px;
+  display: block; 
+  cursor: pointer;
   margin-top: 2%;
 }
 
 .dropArea:hover {
-  text-decoration: underline; /* Podkreślenie tekstu po najechaniu myszką */
+  text-decoration:double; 
 }
 
 .container.dragging {
-  border: 2px dashed #3498db; /* Kolor obramowania podczas przeciągania */
+  border: 2px dashed #3498db; 
 }
 
 .dropArea.dragging {
-  color: #3498db; /* Zmiana koloru tekstu podczas przeciągania */
-  font-weight: bold; /* Wytłuszczenie tekstu podczas przeciągania */
+  color: #3498db; 
+  font-weight: bold; 
 }
 
 .progressBar {

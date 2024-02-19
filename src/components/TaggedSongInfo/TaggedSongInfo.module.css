@@ -2,7 +2,7 @@
   max-width: 900px;
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -22,7 +22,7 @@
 }
 
 .songInform{
-  padding-left: 11%;
+  padding-left: 10%;
 }
 
 h3 {

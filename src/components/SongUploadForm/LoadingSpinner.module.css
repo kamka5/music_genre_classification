@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  margin-bottom: -2.5%;
 }
 
 .spinner {
@@ -16,6 +17,7 @@
 
 .waitingPara {
   padding-left: 1%;
+  padding-top: 1.5%;
 }
 
 @keyframes spin {

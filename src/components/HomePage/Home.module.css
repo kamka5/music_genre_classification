@@ -169,7 +169,7 @@ nav a:hover {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(calc(-100% * 6.9));
+    transform: translateX(calc(-100% * 8.8));
   }
 }
 

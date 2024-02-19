@@ -242,17 +242,23 @@ const TaggedSongInfo = () => {
     (a, b) => b.value - a.value
   );
 
+  const nonZeroCorrelationChartData = sortedCorrelationChartData.filter(
+    (entry) => entry.value !== 0
+  );
+
   const optionsPieChart = {
     chart: {
       type: "pie",
       width: 750,
       height: 400,
     },
-    colors: sortedCorrelationChartData.map((entry) => entry.color),
-    labels: sortedCorrelationChartData.map((entry) => entry.name),
+    colors: nonZeroCorrelationChartData.map((entry) => entry.color),
+    labels: nonZeroCorrelationChartData.map((entry) => entry.name),
   };
 
-  const seriesPieChart = sortedCorrelationChartData.map((entry) => entry.value);
+  const seriesPieChart = nonZeroCorrelationChartData.map(
+    (entry) => entry.value
+  );
 
   function formatDate(dateString) {
     const options = {

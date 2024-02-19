@@ -298,8 +298,13 @@ const TaggedSongInfo = () => {
               {songInfo.tags.year || "Brak informacji"}
             </p>
             <p>
-              <strong>Rozpoznany głowny gatunek:</strong>{" "}
-              <strong style={{ textTransform: "uppercase" }}>
+              <strong>Rozpoznany główny gatunek:</strong>{" "}
+              <strong
+                style={{
+                  textTransform: "uppercase",
+                  color: getColorByGenre(songInfo.genre),
+                }}
+              >
                 {songInfo.genre || "Brak informacji"}
               </strong>
             </p>

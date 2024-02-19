@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"; // Dodano import Axiosa
+import axios from "axios";
 import styles from "./Register.module.css";
 
 const RegisterPage = () => {
@@ -8,6 +8,7 @@ const RegisterPage = () => {
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -40,6 +41,10 @@ const RegisterPage = () => {
     ) {
       errors.password =
         "Hasło powinno zawierać co najmniej jedną małą literę, jedną wielką literę, cyfrę i znak specjalny.";
+    }
+
+    if (password !== confirmPassword) {
+      errors.confirmPassword = "Hasła nie pasują do siebie.";
     }
 
     return errors;
@@ -108,6 +113,12 @@ const RegisterPage = () => {
         type="password"
         placeholder="Hasło"
         onChange={(e) => setPassword(e.target.value)}
+        onKeyPress={handleKeyPress}
+      />
+      <input
+        type="password"
+        placeholder="Potwierdź hasło"
+        onChange={(e) => setConfirmPassword(e.target.value)}
         onKeyPress={handleKeyPress}
       />
       <button

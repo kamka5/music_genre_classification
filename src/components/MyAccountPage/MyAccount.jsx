@@ -63,12 +63,14 @@ const MyAccountPage = () => {
           (a, b) => b[1] - a[1]
         );
 
-        const genreLabels = sortedGenreFrequency.map((entry) => entry[0]);
+        const genreLabelsWithCount = sortedGenreFrequency.map(
+          (entry) => `${entry[0]} (${entry[1]})`
+        );
         const genreDataValues = sortedGenreFrequency.map((entry) => entry[1]);
-        const colors = generateColors(genreLabels.length);
+        const colors = generateColors(genreLabelsWithCount.length);
 
         setGenreFrequencyData({
-          labels: genreLabels,
+          labels: genreLabelsWithCount,
           data: genreDataValues,
           colors: colors,
         });

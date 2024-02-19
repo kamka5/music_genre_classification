@@ -80,7 +80,7 @@
 }
 
 .dropArea:hover {
-  text-decoration:double; 
+  cursor:crosshair; 
 }
 
 .container.dragging {

@@ -377,7 +377,9 @@ const TaggedSongInfo = () => {
         <Col>
           <h3>
             Dokładniejszy rozkład gatunków w utworze{" "}
-            <span className={styles.songInfo}>"{songInfo.fileName}"</span>
+            <span className={styles.songInfo}>
+              "{songInfo.tags.artist} - {songInfo.tags.title}"
+            </span>
           </h3>{" "}
           <h3 className={styles.songInfo}>
             Gatunek określany kolejno w każdym 3-sekundowym segmencie

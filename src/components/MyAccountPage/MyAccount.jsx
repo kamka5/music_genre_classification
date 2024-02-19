@@ -85,7 +85,9 @@ const MyAccountPage = () => {
     const colors = [];
     for (let i = 0; i < count; i++) {
       const hue = (i * (360 / count)) % 360;
-      colors.push(`hsla(${hue}, 70%, 50%, 0.7)`);
+      const saturation = 85;
+      const lightness = 48;
+      colors.push(`hsla(${hue}, ${saturation}%, ${lightness}%, 0.7)`);
     }
     return colors;
   };

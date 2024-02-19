@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import SongUploadForm from "../SongUploadForm/SongUpload";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingAnim from "./LoadingAnim";
 import LoadingSpinner2 from "../SongUploadForm/LoadingSpinner";
 import styles from "./Home.module.css";
 import axios from "axios";
@@ -206,7 +206,7 @@ const HomePage = () => {
         </Col>
       </Row>
       {isLoading && <Overlay />}
-      {isLoading && <LoadingSpinner />}{" "}
+      {isLoading && <LoadingAnim />}{" "}
       {!isLoading && isUploadFormVisible && (
         <Row>
           <Col>

@@ -2,7 +2,7 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
 
-const LoadingSpinner = () => {
+const LoadingAnim = () => {
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
       <Spinner animation="border" variant="primary" />
@@ -11,4 +11,4 @@ const LoadingSpinner = () => {
   );
 };
 
-export default LoadingSpinner;
+export default LoadingAnim;

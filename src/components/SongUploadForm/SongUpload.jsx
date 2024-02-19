@@ -17,6 +17,11 @@ const SongUploadForm = ({ onUploadComplete, isUserLoggedIn }) => {
   const handleDrop = (e) => {
     e.preventDefault();
 
+    if (!isUserLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
     const droppedFile = e.dataTransfer.files[0];
 
     if (droppedFile) {

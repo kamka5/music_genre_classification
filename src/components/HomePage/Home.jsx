@@ -260,6 +260,7 @@ const HomePage = () => {
                 <label>
                   Tytuł:
                   <input
+                    className={styles.customInput}
                     type="text"
                     value={editedTags.title}
                     onChange={(e) => handleTagChange("title", e.target.value)}
@@ -268,6 +269,7 @@ const HomePage = () => {
                 <label>
                   Wykonawca:
                   <input
+                    className={styles.customInput}
                     type="text"
                     value={editedTags.artist}
                     onChange={(e) => handleTagChange("artist", e.target.value)}
@@ -276,6 +278,7 @@ const HomePage = () => {
                 <label>
                   Album:
                   <input
+                    className={styles.customInput}
                     type="text"
                     value={editedTags.album}
                     onChange={(e) => handleTagChange("album", e.target.value)}
@@ -284,6 +287,7 @@ const HomePage = () => {
                 <label>
                   Rok wydania:
                   <input
+                    className={styles.customInput}
                     type="text"
                     value={editedTags.year}
                     onChange={(e) => handleTagChange("year", e.target.value)}

@@ -28,8 +28,8 @@
 }
 
 .customUploadButton {
-  padding: 15px;
-  margin: -5% 5% 3% 5%;
+  padding: 15px 25px;
+  margin: -5% 5% 3% 0%;
   background-color: #646464;
   color: #fff;
   border: none;

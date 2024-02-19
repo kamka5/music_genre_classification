@@ -218,7 +218,7 @@ const HomePage = () => {
               {!user && (
                 <div className={styles.centeredContent}>
                   <p>
-                    Zaloguj, się by móc ropoznać gatunek i oznaczać piosenki.
+                    Zaloguj, się by móc rozpoznać gatunek i oznaczać piosenki.
                     Dodatkowo zyskasz dostęp do historii przesłanych utworów,
                     statystyk na ich temat i nie tylko.
                   </p>

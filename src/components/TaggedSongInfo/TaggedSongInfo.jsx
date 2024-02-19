@@ -407,7 +407,7 @@ const TaggedSongInfo = () => {
               }}
             >
               {" "}
-              Powyższy diagram przedstawia strukturę utworu, która bazuje na
+              Powyższy diagram przedstawia strukturę utworu, bazując na
               fundamencie dziesięciu kluczowych gatunków muzycznych.
             </p>
           </div>

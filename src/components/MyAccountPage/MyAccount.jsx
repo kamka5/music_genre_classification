@@ -117,7 +117,6 @@ const MyAccountPage = () => {
               <strong>Liczba przesłanych piosenek: </strong>
               {totalSongs}
             </p>{" "}
-            <br />
             <p>
               Konto założono: {new Date(accountCreationDate).toLocaleString()}
             </p>{" "}

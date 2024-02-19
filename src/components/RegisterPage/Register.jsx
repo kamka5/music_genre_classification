@@ -25,7 +25,7 @@ const RegisterPage = () => {
 
     if (!email) {
       errors.email = "Pole Email jest wymagane.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       errors.email = "Wprowadź poprawny adres email.";
     }
 

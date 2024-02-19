@@ -138,7 +138,7 @@ const MyAccountPage = () => {
                   marginBottom: "4%",
                 }}
               >
-                Twój ulubiony gatunek: {genreFrequencyData.labels[0]}
+                Twój ulubiony gatunek to {genreFrequencyData.labels[0]}.
               </p>
             )}
             <br />

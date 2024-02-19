@@ -114,10 +114,10 @@ const MyAccountPage = () => {
               {user.email}
             </p>
             <p>
-              <strong>Liczba przesłanych piosenek: </strong>
+              <strong>Liczba przesłanych plików muzycznych: </strong>
               {totalSongs}
             </p>{" "}
-            <p>
+            <p style={{ marginTop: "3%" }}>
               Konto założono: {new Date(accountCreationDate).toLocaleString()}
             </p>{" "}
           </div>

@@ -303,7 +303,6 @@ const HomePage = () => {
                   <br />
                   Zostanie on rozpoznany i dodany do tagów utworu automatycznie.
                 </p>
-                <br />
                 {isUploading && <Overlay />}
                 {isUploading && <LoadingSpinner2 />} <br />
                 {!isUploading && (

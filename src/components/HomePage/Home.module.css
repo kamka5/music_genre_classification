@@ -104,9 +104,9 @@ nav a:hover {
 }
 
 .songTitle{
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 0.94em;
-  color: #001580;
+  font-family: monospace;
+  font-size: 1.33em;
+  color: #3f54bb;
 }
 
 .registerLink {

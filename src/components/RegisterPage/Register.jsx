@@ -16,34 +16,47 @@ const RegisterPage = () => {
   const validateForm = () => {
     const errors = {};
 
-    if (!name) {
+    const MAX_NAME_LENGTH = 100;
+    const MAX_SURNAME_LENGTH = 100;
+    const MAX_EMAIL_LENGTH = 255;
+    const MAX_PASSWORD_LENGTH = 100;
+
+    if (!name.trim()) {
       errors.name = "Pole Imię jest wymagane.";
+    } else if (name.length > MAX_NAME_LENGTH) {
+      errors.name = `Imię nie może przekraczać ${MAX_NAME_LENGTH} znaków.`;
     }
 
-    if (!surname) {
+    if (!surname.trim()) {
       errors.surname = "Pole Nazwisko jest wymagane.";
+    } else if (surname.length > MAX_SURNAME_LENGTH) {
+      errors.surname = `Nazwisko nie może przekraczać ${MAX_SURNAME_LENGTH} znaków.`;
     }
 
-    if (!email) {
+    if (!email.trim()) {
       errors.email = "Pole Email jest wymagane.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       errors.email = "Wprowadź poprawny adres email.";
+    } else if (email.length > MAX_EMAIL_LENGTH) {
+      errors.email = `Email nie może przekraczać ${MAX_EMAIL_LENGTH} znaków.`;
     }
 
-    if (!password) {
+    if (!password.trim()) {
       errors.password = "Pole Hasło jest wymagane.";
-    } else if (password.length < 8) {
-      errors.password = "Hasło musi zawierać co najmniej 8 znaków.";
+    } else if (password.length < 8 || password.length > MAX_PASSWORD_LENGTH) {
+      errors.password = "Hasło musi zawierać od 8 do 100 znaków.";
     } else if (
       !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(
         password
       )
     ) {
       errors.password =
-        "Hasło powinno zawierać co najmniej jedną małą literę, jedną wielką literę, cyfrę i znak specjalny.";
+        "Hasło powinno zawierać co najmniej jedną małą i wielką literę, cyfrę oraz znak specjalny.";
     }
 
-    if (password !== confirmPassword) {
+    if (!confirmPassword.trim()) {
+      errors.confirmPassword = "Pole Potwierdź hasło jest wymagane.";
+    } else if (password !== confirmPassword) {
       errors.confirmPassword = "Hasła nie pasują do siebie.";
     }
 

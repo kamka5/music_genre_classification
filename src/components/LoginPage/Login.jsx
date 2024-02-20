@@ -38,15 +38,24 @@ const LoginPage = ({ setUser }) => {
 
   const validateForm = () => {
     const errors = {};
+    const MAX_EMAIL_LENGTH = 255;
+    const MAX_PASSWORD_LENGTH = 100;
 
-    if (!email) {
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedEmail) {
       errors.email = "Pole Email jest wymagane.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/\S+@\S+\.\S+/.test(trimmedEmail)) {
       errors.email = "Wprowadź poprawny adres email.";
+    } else if (trimmedEmail.length > MAX_EMAIL_LENGTH) {
+      errors.email = `Email nie może przekraczać ${MAX_EMAIL_LENGTH} znaków.`;
     }
 
-    if (!password) {
+    if (!trimmedPassword) {
       errors.password = "Pole Hasło jest wymagane.";
+    } else if (trimmedPassword.length > MAX_PASSWORD_LENGTH) {
+      errors.password = `Hasło nie może przekraczać ${MAX_PASSWORD_LENGTH} znaków.`;
     }
 
     return errors;
@@ -70,8 +79,8 @@ const LoginPage = ({ setUser }) => {
       }
 
       const response = await axios.post("http://localhost:3000/auth/signin", {
-        email,
-        password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
       const { access_token } = response.data;

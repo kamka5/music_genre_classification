@@ -123,7 +123,10 @@ const TaggedSongInfo = () => {
     for (let i = 0; i < originalGenres.length; i++) {
       currentGenreGroup.push(originalGenres[i]);
 
-      if (currentGenreGroup.length === 5 || i === originalGenres.length - 1) {
+      if (
+        currentGenreGroup.length === 5 ||
+        (i === originalGenres.length - 1 && currentGenreGroup.length >= 3)
+      ) {
         if (currentGenreGroup.length === 5) {
           const genreCountMap = currentGenreGroup.reduce((map, genre) => {
             map.set(genre, (map.get(genre) || 0) + 1);

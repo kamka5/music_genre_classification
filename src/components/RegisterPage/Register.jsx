@@ -92,7 +92,11 @@ const RegisterPage = () => {
 
       navigate("/");
     } catch (error) {
-      console.error("Błąd rejestracji:", error);
+      if (error.response && error.response.status === 409) {
+        setErrors({ email: "Konto o podanym mailu już istnieje." });
+      } else {
+        console.error("Błąd rejestracji:", error);
+      }
     } finally {
       setLoading(false);
     }
